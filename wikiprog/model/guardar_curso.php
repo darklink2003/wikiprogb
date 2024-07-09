@@ -13,6 +13,9 @@
  * @author Pablo Alexander Mondragon Acevedo
  */
 
+// Incluir el archivo de configuración de la base de datos
+include 'db_config.php';
+
 // Obtener los datos del formulario
 $titulo_curso = $_POST['titulo_curso'];
 $descripcion = $_POST['descripcion'];
@@ -40,28 +43,19 @@ function obtenerUsuarioId()
 // Función para obtener el rango_id del usuario actual (simulada)
 function obtenerRangoIdUsuario($usuario_id)
 {
-    // Conexión a la base de datos
-    $conexion = new mysqli('localhost', 'root', '', 'wikiprog');
-    if ($conexion->connect_error) {
-        die("Error de conexión: " . $conexion->connect_error);
-    }
+    global $conn; // Acceder a la conexión global
 
     // Consulta para obtener el rango_id del usuario
     $sql = "SELECT rango_id FROM usuario WHERE usuario_id = ?";
-    $stmt = $conexion->prepare($sql);
+    $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $usuario_id);
     $stmt->execute();
     $stmt->bind_result($rango_id);
     $stmt->fetch();
 
-    // Cerrar la conexión y liberar recursos
-    $stmt->close();
-    $conexion->close();
-
     // Devolver el rango_id obtenido
     return $rango_id;
 }
-
 
 // Obtener el usuario_id del usuario actual
 $usuario_id = obtenerUsuarioId();
@@ -73,9 +67,6 @@ $rango_id_usuario = obtenerRangoIdUsuario($usuario_id);
 if (!in_array($rango_id_usuario, $rango_id_permitidos)) {
     die("No tienes permisos suficientes para agregar un curso.");
 }
-
-// Conexión a la base de datos
-include 'db_config.php';
 
 // Verificar si la categoría existe
 $sql_categoria = "SELECT categoria_id FROM categoria WHERE categoria_id = ?";

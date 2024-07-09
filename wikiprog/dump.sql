@@ -84,11 +84,13 @@ CREATE TABLE `comentario` (
   `usuario_id` int(11) NOT NULL,
   `curso_id` int(11) NOT NULL,
   `comentario` text NOT NULL,
+  `megustac` int(45) DEFAULT 0,
+  `dislike` int(45) DEFAULT 0,
   `fecha_registro` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`comentario_id`),
   KEY `usuario_id` (`usuario_id`),
   CONSTRAINT `comentario_ibfk_1` FOREIGN KEY (`usuario_id`) REFERENCES `usuario` (`usuario_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -97,7 +99,7 @@ CREATE TABLE `comentario` (
 
 LOCK TABLES `comentario` WRITE;
 /*!40000 ALTER TABLE `comentario` DISABLE KEYS */;
-INSERT INTO `comentario` VALUES (1,14,33,'xd','2024-06-27 12:52:43'),(2,14,26,'hola','2024-06-27 15:46:55'),(3,21,32,'5151','2024-07-04 21:52:10'),(4,21,1,'asdsd','2024-07-04 22:03:17'),(5,21,1,'asdsd','2024-07-04 22:05:54'),(6,21,1,'ghghgh','2024-07-04 22:12:12'),(7,21,1,'asdsadqwewewe','2024-07-04 22:13:04'),(8,21,27,'asdsadfxzcxc','2024-07-04 22:18:08'),(9,21,36,'56161','2024-07-05 02:17:50'),(10,21,27,'123123132','2024-07-05 02:46:15'),(11,21,27,'gfsd','2024-07-05 16:15:14'),(12,21,27,'hola','2024-07-05 16:41:02'),(13,21,29,'xd','2024-07-07 23:18:50');
+INSERT INTO `comentario` VALUES (1,14,33,'xd',0,0,'2024-06-27 12:52:43'),(2,14,26,'hola',0,0,'2024-06-27 15:46:55'),(3,21,32,'5151',0,0,'2024-07-04 21:52:10'),(4,21,1,'asdsd',0,0,'2024-07-04 22:03:17'),(5,21,1,'asdsd',0,0,'2024-07-04 22:05:54'),(6,21,1,'ghghgh',0,0,'2024-07-04 22:12:12'),(7,21,1,'asdsadqwewewe',0,0,'2024-07-04 22:13:04'),(8,21,27,'asdsadfxzcxc',0,0,'2024-07-04 22:18:08'),(9,21,36,'56161',0,0,'2024-07-05 02:17:50'),(10,21,27,'123123132',0,0,'2024-07-05 02:46:15'),(11,21,27,'gfsd',0,0,'2024-07-05 16:15:14'),(12,21,27,'hola',0,0,'2024-07-05 16:41:02'),(13,21,29,'xd',0,0,'2024-07-07 23:18:50'),(14,21,39,'si funciona el metodo',0,0,'2024-07-08 21:06:07'),(15,21,39,'a',0,0,'2024-07-09 13:58:00');
 /*!40000 ALTER TABLE `comentario` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -122,7 +124,7 @@ CREATE TABLE `curso` (
   KEY `curso_ibfk_usuario` (`usuario_id`),
   CONSTRAINT `curso_ibfk_1` FOREIGN KEY (`categoria_id`) REFERENCES `categoria` (`categoria_id`),
   CONSTRAINT `curso_ibfk_usuario` FOREIGN KEY (`usuario_id`) REFERENCES `usuario` (`usuario_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -131,7 +133,7 @@ CREATE TABLE `curso` (
 
 LOCK TABLES `curso` WRITE;
 /*!40000 ALTER TABLE `curso` DISABLE KEYS */;
-INSERT INTO `curso` VALUES (27,'asdw','qweqwe',1,'2024-06-11 15:38:56',0,0,14),(28,'motos','rapidos',5,'2024-06-11 15:55:11',0,0,14),(29,'matematicas','numero y cosas',5,'2024-06-17 12:36:47',0,0,14),(32,'español','lenguaje',5,'2024-06-17 12:44:49',0,0,14),(33,'informaticas','compus',1,'2024-06-17 12:59:46',0,0,14),(34,'artes','dibujo',3,'2024-06-21 11:55:08',0,0,14),(35,'youtube ','videos',5,'2024-06-22 20:44:55',0,0,21),(36,'sql','numero y cosas',4,'2024-06-27 16:22:09',0,0,21),(38,'ejemplos','otros',5,'2024-07-02 20:30:05',0,0,21);
+INSERT INTO `curso` VALUES (39,'php','programar',1,'2024-07-08 21:05:18',0,0,21);
 /*!40000 ALTER TABLE `curso` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -183,7 +185,7 @@ CREATE TABLE `leccion` (
   PRIMARY KEY (`leccion_id`),
   KEY `curso_id` (`curso_id`),
   CONSTRAINT `leccion_ibfk_1` FOREIGN KEY (`curso_id`) REFERENCES `curso` (`curso_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -192,7 +194,7 @@ CREATE TABLE `leccion` (
 
 LOCK TABLES `leccion` WRITE;
 /*!40000 ALTER TABLE `leccion` DISABLE KEYS */;
-INSERT INTO `leccion` VALUES (24,27,'45654645654','456456456456',NULL,'2024-06-11 15:38:56'),(25,28,'fiau','veloz',NULL,'2024-06-11 15:55:11'),(26,28,'harry','potter',NULL,'2024-06-12 13:10:04'),(27,29,'suma','esta',NULL,'2024-06-17 12:36:47'),(28,29,'resta','con esta ',NULL,'2024-06-17 12:36:47'),(29,32,'letras','y numeor','archivos_leccion/66702fc11f6ae_logica.txt','2024-06-17 12:44:49'),(30,33,'teclado','numerico','archivos_leccion/6670334290376_wikiprog.sql','2024-06-17 12:59:46'),(31,33,'mouse','mover','archivos_leccion/66703342905f9_export1667333521277.mdp','2024-06-17 12:59:46'),(32,34,'trazos','lineas','../archivos_leccion/66756a1bec5d8_descarga (1).jpg','2024-06-21 11:55:08'),(33,35,'tutoriales','loquendo','../archivos_leccion/667737c74b4ed_Pablo_Mondragon.jpg','2024-06-22 20:44:55'),(34,36,'create','crea esta','../archivos_leccion/667d91b10ac1c_ADSO-14 - EV03 ajedrez validaciones v1.py','2024-06-27 16:22:09'),(35,38,'prueba','1','../archivos_leccion/66846b3508203_arnol2.jpg','2024-07-02 20:30:05'),(36,38,'2','2','../archivos_leccion/6684634d8a239_arnol2.jpg','2024-07-02 20:30:05'),(37,38,'3','3','../archivos_leccion/6684634d90621_arnol2.jpg','2024-07-02 20:30:05'),(38,38,'4','4','../archivos_leccion/6684634d90987_arnol2.jpg','2024-07-02 20:30:05'),(39,38,'5','5','../archivos_leccion/6684634d90bd9_arnol2.jpg','2024-07-02 20:30:05'),(40,38,'6','6','../archivos_leccion/6684634d90e19_arnol2.jpg','2024-07-02 20:30:05');
+INSERT INTO `leccion` VALUES (41,39,'funciones','muchas funciones','../archivos_leccion/668c548eea645_Detalles_Demograficos.pdf','2024-07-08 21:05:18'),(42,39,'metodos','muy utilices','../archivos_leccion/668c548eec547_detalles_tecnologicos.pdf','2024-07-08 21:05:18');
 /*!40000 ALTER TABLE `leccion` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -322,7 +324,7 @@ CREATE TABLE `usuario` (
   PRIMARY KEY (`usuario_id`),
   KEY `rango_id` (`rango_id`),
   CONSTRAINT `usuario_ibfk_1` FOREIGN KEY (`rango_id`) REFERENCES `rango` (`rango_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -331,7 +333,7 @@ CREATE TABLE `usuario` (
 
 LOCK TABLES `usuario` WRITE;
 /*!40000 ALTER TABLE `usuario` DISABLE KEYS */;
-INSERT INTO `usuario` VALUES (14,'marzo','','marzo@gmail.com','marzo','marzo2000',1,'2024-06-04 21:20:05',0,0),(16,'mike','Maicol_Sanchez.jpg','mike@gmail.com','soy un programador','mike2003',1,'2024-06-11 16:39:27',0,0),(21,'pablo','arnol2.jpg','pablomondragonacevedo@gmail.com','aaaa','123',2,'2024-06-21 11:59:35',0,0),(27,'juan','null','juan@gmail.com','castalleda','456',1,'2024-06-26 19:13:50',0,0),(29,'julian','null','julian@gmail.com','cine','$2y$10$gbp6yhVUU99ssOGcvpUpCePVviyoikG3JrXPZ7',1,'2024-06-28 15:45:50',0,0),(30,'andres','null','andres@gmail.com','andres','andres',1,'2024-06-28 16:17:05',0,0);
+INSERT INTO `usuario` VALUES (14,'marzo','','marzo@gmail.com','marzo','marzo2000',1,'2024-06-04 21:20:05',0,0),(16,'mike','Maicol_Sanchez.jpg','mike@gmail.com','soy un programador','mike2003',1,'2024-06-11 16:39:27',0,0),(21,'pablo','arnol2.jpg','pablomondragonacevedo@gmail.com','aaaa','123',2,'2024-06-21 11:59:35',0,0),(27,'juan','null','juan@gmail.com','castalleda','456',1,'2024-06-26 19:13:50',0,0),(29,'julian','null','julian@gmail.com','cine','$2y$10$gbp6yhVUU99ssOGcvpUpCePVviyoikG3JrXPZ7',1,'2024-06-28 15:45:50',0,0),(30,'andres','null','andres@gmail.com','andres','andres',1,'2024-06-28 16:17:05',0,0),(31,'dany','null','dany@gmail.com','soy un programador','Dany1#20',1,'2024-07-08 20:16:28',0,0);
 /*!40000 ALTER TABLE `usuario` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -344,4 +346,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-07-08 12:13:12
+-- Dump completed on 2024-07-09  9:29:43

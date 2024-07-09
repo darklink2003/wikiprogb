@@ -8,14 +8,6 @@ if (isset($_GET['curso_id'])) {
 }
 ?>
 
-<!DOCTYPE html>
-<html lang="es">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sección 7 - Curso <?php echo $curso_id; ?></title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <style>
         /* Estilos CSS personalizados */
         .leccion-container,
@@ -55,18 +47,15 @@ if (isset($_GET['curso_id'])) {
             }
         }
     </style>
-</head>
-
-<body>
 
     <div class="container">
         <!-- Contenedor de información del curso -->
         <div id="info-curso" class="mt-4 bg-dark p-3 text-white rounded">
             <!-- Aquí se cargará dinámicamente la información del curso y el enlace de inscripción -->
         </div>
-
+<br>
         <!-- Contenedor de lecciones del curso -->
-        <div id="lecciones-container" class="mt-4 row">
+        <div id="lecciones-container" class="mt-12 row">
             <!-- Aquí se cargarán dinámicamente las lecciones del curso -->
         </div>
 
@@ -90,6 +79,3 @@ if (isset($_GET['curso_id'])) {
         </div>
     </div>
 
-</body>
-
-</html>

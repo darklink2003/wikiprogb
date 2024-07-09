@@ -29,7 +29,7 @@ if(isset($_GET['id'])) {
         $conn->commit();
 
         // Redirigir de vuelta a donde sea necesario
-        header("Location: ../index.php?eliminado=true");
+        header("Location: ../controller/controlador.php?seccion=seccion6");
         exit();
     } catch (Exception $e) {
         // Revertir la transacción en caso de error

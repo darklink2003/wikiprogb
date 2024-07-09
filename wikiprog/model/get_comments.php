@@ -2,9 +2,8 @@
 /**
  * get_comments.php
  * Consulta y devuelve los comentarios asociados a un curso específico en formato JSON.
- * 
  *
- * @version 1.0
+ * @version 1.1
  * author Pablo Alexander Mondragon Acevedo
  */
 
@@ -20,20 +19,20 @@ if ($conn->connect_error) {
 $curso_id = isset($_GET['curso_id']) ? intval($_GET['curso_id']) : 0;
 
 // Preparar la consulta para obtener los comentarios asociados a un curso_id específico
-$query = "SELECT c.comentario_id, c.usuario_id, c.curso_id, c.comentario, c.fecha_registro, u.usuario as nombre_usuario 
+$query = "SELECT c.comentario_id, c.usuario_id, c.curso_id, c.comentario, c.fecha_registro, c.megustac, c.dislike, u.usuario AS nombre_usuario 
           FROM comentario c
           INNER JOIN usuario u ON c.usuario_id = u.usuario_id
           WHERE c.curso_id = ?";
-$stmt = mysqli_prepare($conn, $query);
+$stmt = $conn->prepare($query);
 
 // Verificar si la preparación fue exitosa
 if ($stmt) {
-    mysqli_stmt_bind_param($stmt, "i", $curso_id);
-    mysqli_stmt_execute($stmt);
-    $resultado = mysqli_stmt_get_result($stmt);
+    $stmt->bind_param("i", $curso_id);
+    $stmt->execute();
+    $resultado = $stmt->get_result();
 
     $comentarios = array();
-    while ($comentario = mysqli_fetch_assoc($resultado)) {
+    while ($comentario = $resultado->fetch_assoc()) {
         $comentarios[] = $comentario;
     }
 
@@ -44,12 +43,12 @@ if ($stmt) {
     echo json_encode($comentarios);
 
     // Cerrar el statement
-    mysqli_stmt_close($stmt);
+    $stmt->close();
 } else {
     // Devolver un mensaje de error en formato JSON si la preparación de la consulta falla
-    echo json_encode(array('error' => 'Error en la preparación de la consulta: ' . mysqli_error($conn)));
+    echo json_encode(array('error' => 'Error en la preparación de la consulta: ' . $conn->error));
 }
 
 // Cerrar conexión
-mysqli_close($conn);
+$conn->close();
 ?>

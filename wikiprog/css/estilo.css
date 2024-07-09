@@ -146,6 +146,7 @@ body {
   padding: 10px;
   border-radius: 5px;
   cursor: pointer;
+  display: flex;
 }
 
 /* Estilos para otros elementos (ejemplos) */
