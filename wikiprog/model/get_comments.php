@@ -1,9 +1,10 @@
 <?php
 /**
  * get_comments.php
- * Consulta y devuelve los comentarios asociados a un curso específico en formato JSON.
+ * Consulta y devuelve los comentarios asociados a un curso específico en formato JSON,
+ * incluyendo el conteo de acciones de like y dislike.
  *
- * @version 1.1
+ * @version 1.2
  * author Pablo Alexander Mondragon Acevedo
  */
 
@@ -18,11 +19,16 @@ if ($conn->connect_error) {
 // Obtener el curso_id de la solicitud GET
 $curso_id = isset($_GET['curso_id']) ? intval($_GET['curso_id']) : 0;
 
-// Preparar la consulta para obtener los comentarios asociados a un curso_id específico
-$query = "SELECT c.comentario_id, c.usuario_id, c.curso_id, c.comentario, c.fecha_registro, c.megustac, c.dislike, u.usuario AS nombre_usuario 
+// Preparar la consulta para obtener los comentarios asociados a un curso_id específico,
+// incluyendo el conteo de likes y dislikes
+$query = "SELECT c.comentario_id, c.usuario_id, c.curso_id, c.comentario, c.fecha_registro, u.usuario AS nombre_usuario,
+                 (SELECT COUNT(*) FROM interaccion WHERE comentario_id = c.comentario_id AND accion = 'like') AS count_likes,
+                 (SELECT COUNT(*) FROM interaccion WHERE comentario_id = c.comentario_id AND accion = 'dislike') AS count_dislikes
           FROM comentario c
           INNER JOIN usuario u ON c.usuario_id = u.usuario_id
-          WHERE c.curso_id = ?";
+          WHERE c.curso_id = ?
+          ORDER BY c.fecha_registro DESC";
+
 $stmt = $conn->prepare($query);
 
 // Verificar si la preparación fue exitosa
