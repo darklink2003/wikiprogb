@@ -21,10 +21,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 response.data.forEach(function (comentario) {
                     // Crear elementos HTML para cada comentario
                     const comentarioDiv = document.createElement('div');
-                    comentarioDiv.className = 'col-lg-6 col-md-6 col-sm-12 mb-4'; // Ajusta las columnas según tus necesidades
+                    comentarioDiv.className = 'col-lg-12 col-md-12 col-sm-12 mb-12'; // Ajusta las columnas según tus necesidades
 
                     const comentarioContainer = document.createElement('div');
-                    comentarioContainer.className = 'comentario-container p-3 border rounded'; // Estilos de borde y redondez
+                    comentarioContainer.className = 'comentario-container  border rounded'; // Estilos de borde y redondez
 
                     // Elementos para mostrar información del comentario
                     const usuario = document.createElement('h5');

@@ -57,7 +57,7 @@ if ($result->num_rows > 0) {
 
     if ($stmt->execute()) {
         // Registro exitoso, redirigir a la página de inicio de sesión
-        echo "Registro exitoso. Puedes iniciar sesión ahora.";
+        // echo "Registro exitoso. Puedes iniciar sesión ahora.";
         header("Location: ../index.php");
     } else {
         // Error al insertar en la base de datos

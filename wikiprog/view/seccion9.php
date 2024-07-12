@@ -61,7 +61,7 @@ if ($result->num_rows > 0) {
                     <div class="col-md-3">
                         <!-- Columna vacía -->
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-3" style="display:flex;">
                         <button type="button" id="eliminarCuentaBtn" onclick="abrirModal()">Eliminar Cuenta</button>
                         <button type="button" style="margin-left: 5px;"><a href="controlador.php?seccion=seccion10"
                                 style="text-decoration: none; color: white;">Editar Perfil</a></button>
@@ -92,22 +92,28 @@ if ($result->num_rows > 0) {
             <div class="container_proyecto">
                 <div class="row">
                     <div class="col-md-5 d-flex flex-column align-items-start">
-                        <div id="columna1" class="kj">
-                            <h5 style="color: white; text-align: center;">Datos</h5>
-                            <p style="color: white;">Biografía: <?php echo htmlspecialchars($row["biografia"]); ?></p>
-                            <p style="color: white;">Correo: <?php echo htmlspecialchars($row["correo"]); ?></p>
+                        <div id="columna1" class="kj" style="padding:10px">
+                            <h5 style="color: white; text-align: center; font-size: 30px;">Datos</h5>
+                            <p style="color: white; font-size: 20px;">Biografía:
+                                <?php echo htmlspecialchars($row["biografia"]); ?>
+                            </p>
+                            <p style="color: white; font-size: 20px;">Correo:
+                                <?php echo htmlspecialchars($row["correo"]); ?>
+                            </p>
                         </div>
                     </div>
                     <div class="col-md-7 d-flex flex-column align-items-center">
                         <div id="columna2" class="div">
                             <h5 style="color: white; text-align: center;">Cargar mi proyecto</h5>
-                            <form action="../model/actualizar_datos.php" method="POST" enctype="multipart/form-data">
-                                <textarea id="proyectoTextArea" class="w-75" style="margin-left: 70px;" cols="15"
-                                    rows="8"></textarea><br>
-                                <center>
-                                    <button type="submit" class="btn btn-primary mt-2">Enviar</button>
-                                </center>
-                            </form>
+                            <ul style="list-style-type: none; padding: 0;">
+                                <li><a class="dropdown-item" href="controlador.php?seccion=seccion6"
+                                        style="color: white; text-decoration: none;">Lista De Usuarios</a></li>
+                                <li><a class="dropdown-item" href="controlador.php?seccion=seccion3"
+                                        style="color: white; text-decoration: none;">Tus Cursos</a></li>
+                                <li>
+                                    <a class="nav-link" href="controlador.php?seccion=seccion4" style="color: white; text-decoration: none;">Cursos</a>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>

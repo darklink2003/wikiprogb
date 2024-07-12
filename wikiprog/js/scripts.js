@@ -1,4 +1,5 @@
 /**
+ * scripts.js 
  * Este script se ejecuta cuando el DOM ha sido completamente cargado.
  * Carga la información del curso, las lecciones y los comentarios relacionados con un curso específico.
  */

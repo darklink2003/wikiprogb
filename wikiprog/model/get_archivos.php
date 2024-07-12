@@ -3,9 +3,6 @@
  * get_archivos.php
  * Consulta y devuelve los archivos asociados a un usuario específico en formato JSON,
  * incluyendo detalles como el nombre del archivo, tamaño y privacidad.
- *
- * @version 1.0
- * author Pablo Alexander Mondragon Acevedo
  */
 
 // Incluir el archivo de configuración de la base de datos
@@ -16,41 +13,51 @@ if ($conn->connect_error) {
     die("Error de conexión: " . $conn->connect_error);
 }
 
-// Obtener usuario_id del parámetro GET
-$usuario_id = isset($_GET['usuario_id']) ? intval($_GET['usuario_id']) : 0;
+// Obtener el usuario_id desde los parámetros GET
+if (isset($_GET['usuario_id'])) {
+    $usuario_id = $_GET['usuario_id'];
 
-// Preparar la consulta para obtener los archivos asociados a un usuario_id específico
-$query = "SELECT nombre_archivo, tamaño, privacidad_id 
-          FROM archivo 
-          WHERE usuario_id = ?
-          ORDER BY nombre_archivo";
+    // Query para obtener los archivos del usuario
+    $sql = "SELECT a.archivo_id, a.nombre_archivo, a.tamaño, a.fecha_registro, a.privacidad_id, a.archivo, p.tipo AS tipo_privacidad
+            FROM archivo a
+            INNER JOIN privacidad p ON a.privacidad_id = p.privacidad_id
+            WHERE a.usuario_id = $usuario_id";
 
-$stmt = $conn->prepare($query);
+    // Ejecutar la consulta
+    $result = $conn->query($sql);
 
-// Verificar si la preparación fue exitosa
-if ($stmt) {
-    $stmt->bind_param("i", $usuario_id);
-    $stmt->execute();
-    $resultado = $stmt->get_result();
+    // Verificar si se encontraron resultados
+    if ($result->num_rows > 0) {
+        // Arreglo para almacenar los archivos
+        $archivos = array();
 
-    $archivos = array();
-    while ($archivo = $resultado->fetch_assoc()) {
-        $archivos[] = $archivo;
+        // Iterar sobre los archivos y construir la ruta completa al archivo
+        while ($row = $result->fetch_assoc()) {
+            // Construir la ruta completa al archivo (considerando el nombre de la carpeta)
+            $ruta_archivo = 'archivos_usuarios/' . $row['archivo'];
+
+            $archivos[] = array(
+                'archivo_id' => $row['archivo_id'],
+                'nombre_archivo' => $row['nombre_archivo'],
+                'tamaño' => $row['tamaño'],
+                'fecha_registro' => $row['fecha_registro'],
+                'privacidad' => $row['tipo_privacidad'],
+                'enlace_descarga' => $ruta_archivo // Ruta completa al archivo
+            );
+        }
+
+        // Devolver los archivos como JSON
+        header('Content-Type: application/json');
+        echo json_encode($archivos);
+    } else {
+        // Si no se encontraron archivos
+        echo json_encode(array()); // Devolver un arreglo vacío
     }
-
-    // Establecer encabezado para indicar que se devolverá JSON
-    header('Content-Type: application/json');
-
-    // Devolver los datos en formato JSON
-    echo json_encode($archivos);
-
-    // Cerrar el statement
-    $stmt->close();
 } else {
-    // Devolver un mensaje de error en formato JSON si la preparación de la consulta falla
-    echo json_encode(array('error' => 'Error en la preparación de la consulta: ' . $conn->error));
+    // Si no se proporcionó el usuario_id
+    echo "Error: No se proporcionó el parámetro usuario_id.";
 }
 
-// Cerrar conexión
+// Cerrar la conexión
 $conn->close();
 ?>

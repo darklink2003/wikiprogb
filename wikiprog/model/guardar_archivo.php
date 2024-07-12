@@ -40,8 +40,8 @@ if ($_FILES['archivo']['error'] === UPLOAD_ERR_OK) {
     $archivo_size = $_FILES['archivo']['size'];
     $archivo_type = $_FILES['archivo']['type'];
 
-    // Generar un nombre único para el archivo
-    $archivo_path = $uploadDir . uniqid() . '_' . $archivo_name;
+    // Construir la ruta completa del archivo en el directorio de subida
+    $archivo_path = $uploadDir . $archivo_name;
 
     // Mover el archivo al directorio de archivos subidos
     if (move_uploaded_file($archivo_tmp_name, $archivo_path)) {
@@ -85,7 +85,7 @@ if ($_FILES['archivo']['error'] === UPLOAD_ERR_OK) {
         }
 
         // Redirigir a otra página si es necesario
-        header("Location: ../controller/controlador.php?seccion=seccion12");
+        header("Location: ../controller/controlador.php?seccion=seccion12&usuario_id=" . urlencode($usuario_id));
 
         // Cerrar la conexión
         $stmt->close();
