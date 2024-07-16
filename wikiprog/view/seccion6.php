@@ -45,4 +45,12 @@ if (!isset($_SESSION['usuario_id'])) {
          echo (login::vercursos());
         ?>
     </div>
+    <h1>
+        Inscripciones
+    </h1>
+    <div class="row">
+        <?php
+         echo (login::verinscripciones());
+        ?>
+    </div>
 </div>

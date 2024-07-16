@@ -118,6 +118,7 @@ if (empty($usuario_id) && !in_array($seccion, $public_sections)) {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="../js/load_inscripcion.js"></script>
     <script src="../js/load_archivos.js"></script>
     <script src="../js/load_comments.js"></script>
     <script src="../js/mensaje.js"></script>

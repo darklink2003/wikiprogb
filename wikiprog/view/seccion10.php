@@ -43,35 +43,42 @@ $stmt->close();
 $conn->close();
 ?>
 
-<!-- actualizar perfil -->
-<div class="container2">
-    <!-- fila y columnas izquierdas -->
+
+<div class="container">
     <div class="row">
-        <div id="formulario" class="col-md-7">
-            <div id="linea" class="row">
-                <h1>Perfil Público</h1>
-                <hr style="color: white; font-size: 20px;">
+        <div class="col-md-12">
+            <div class="py-4 text-center">
+                <h2>Perfil Público</h2>
+                <hr>
             </div>
             <div class="row">
-                <div id="formulario2" class="col-md-6">
+                <div class="col-md-12">
                     <form action="../model/actualizar_datos.php" method="post" enctype="multipart/form-data">
+
                         <div class="form-group">
                             <label for="formGroupExampleInput">Nombre</label>
-                            <input type="text" class="form-control" id="formGroupExampleInput" name="nombre" value="<?php echo htmlspecialchars($user_data['usuario']); ?>" required>
+                            <input type="text" class="form-control" id="formGroupExampleInput" name="nombre"
+                                value="<?php echo htmlspecialchars($user_data['usuario']); ?>" required>
                         </div>
                         <div class="form-group">
                             <label for="formGroupExampleInput2">Correo Público</label>
-                            <input type="email" class="form-control" id="formGroupExampleInput2" name="correo" value="<?php echo htmlspecialchars($user_data['correo']); ?>" required>
+                            <input type="email" class="form-control" id="formGroupExampleInput2" name="correo"
+                                value="<?php echo htmlspecialchars($user_data['correo']); ?>" required>
                         </div>
                         <div class="form-group">
                             <label for="biografia">Biografía</label>
-                            <textarea class="form-control" id="biografia" name="biografia" rows="3"><?php echo htmlspecialchars($user_data['biografia']); ?></textarea>
-                        </div>
+                            <textarea class="form-control" id="biografia" name="biografia"
+                                rows="3"><?php echo htmlspecialchars($user_data['biografia']); ?></textarea>
+                        </div><br>
                         <div class="form-group">
-                            <label for="perfil_imagen">Imagen de Perfil</label>
-                            <input type="file" class="form-control-file" id="perfil_imagen" name="perfil_imagen" >
-                        </div>
-                        <button id="boton_perfil" type="submit" class="btn btn-primary">Actualizar Perfil</button>
+                            <div class="btn btn-primary">
+                                <label for="perfil_imagen">Imagen de Perfil</label>
+                                <input type="file" class="form-control-file" id="perfil_imagen" name="perfil_imagen">
+
+                            </div>
+                        </div><br>
+
+                        <button type="submit" class="btn btn-primary">Actualizar Perfil</button>
                     </form>
                 </div>
             </div>

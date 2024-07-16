@@ -1,3 +1,4 @@
+// load_archivos.js
 document.addEventListener('DOMContentLoaded', function () {
     const urlParams = new URLSearchParams(window.location.search);
     const usuario_id = urlParams.get('usuario_id');
@@ -65,13 +66,14 @@ document.addEventListener('DOMContentLoaded', function () {
                         col5Div.appendChild(enlaceDescarga);
 
                         // Botón de Eliminar archivo
-                        const btnEliminar = document.createElement('button');
-                        btnEliminar.textContent = 'Eliminar';
-                        btnEliminar.classList.add('btn', 'btn-danger', 'btn-sm', 'ms-1');
-                        btnEliminar.addEventListener('click', function() {
-                            eliminarArchivo(archivo.archivo_id); // Llama a la función eliminarArchivo con el ID del archivo
+                        const enlaceEliminar = document.createElement('a');
+                        enlaceEliminar.textContent = 'Eliminar';
+                        enlaceEliminar.href = `javascript:void(0);`;  // Enlace sin acción por defecto, puedes ajustar esto según tu lógica
+                        enlaceEliminar.classList.add('btn', 'btn-danger', 'btn-sm', 'ms-1');
+                        enlaceEliminar.addEventListener('click', function() {
+                            eliminarArchivo(archivo.archivo_id);  // Llama a la función eliminarArchivo con el ID del archivo
                         });
-                        col5Div.appendChild(btnEliminar);
+                        col5Div.appendChild(enlaceEliminar);
 
                         // Añadir columnas a la fila
                         rowDiv.appendChild(col1Div);
@@ -101,16 +103,13 @@ document.addEventListener('DOMContentLoaded', function () {
             });
     }
 
-    // Llamar a la función para cargar archivos al cargar la página
-    cargarArchivos(usuario_id);
-
     /**
      * Función para eliminar un archivo.
      * @param {number} archivoId - ID del archivo a eliminar.
      */
     function eliminarArchivo(archivoId) {
         if (confirm('¿Estás seguro de que deseas eliminar este archivo?')) {
-            axios.delete(`../model/delete_archivo.php?archivo_id=${archivoId}`)
+            axios.delete(`../model/delte_archivo.php?archivo_id=${archivoId}`)
                 .then(function(response) {
                     console.log(response.data);
                     // Recargar la lista de archivos después de eliminar
@@ -122,4 +121,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
         }
     }
+
+    // Llamar a la función para cargar archivos al cargar la página
+    cargarArchivos(usuario_id);
 });

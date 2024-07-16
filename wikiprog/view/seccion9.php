@@ -106,12 +106,18 @@ if ($result->num_rows > 0) {
                         <div id="columna2" class="div">
                             <h5 style="color: white; text-align: center;">Cargar mi proyecto</h5>
                             <ul style="list-style-type: none; padding: 0;">
-                                <li><a class="dropdown-item" href="controlador.php?seccion=seccion6"
-                                        style="color: white; text-decoration: none;">Lista De Usuarios</a></li>
-                                <li><a class="dropdown-item" href="controlador.php?seccion=seccion3"
-                                        style="color: white; text-decoration: none;">Tus Cursos</a></li>
+                            <li><a class="dropdown-item" href="controlador.php?seccion=seccion6"
+                                        style="color: white; text-decoration: none;">Administrador
+                                    </a>
+                                </li>
                                 <li>
-                                    <a class="nav-link" href="controlador.php?seccion=seccion4" style="color: white; text-decoration: none;">Cursos</a>
+                                    <a class="dropdown-item" href="controlador.php?seccion=seccion3&usuario_id=<?php echo htmlspecialchars($usuario_id); ?>"
+                                        style="color: white; text-decoration: none;">Tus Cursos
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="nav-link" href="controlador.php?seccion=seccion4"
+                                        style="color: white; text-decoration: none;">Cursos</a>
                                 </li>
                             </ul>
                         </div>
@@ -119,6 +125,7 @@ if ($result->num_rows > 0) {
                 </div>
             </div>
         </div>
+        
         <?php
     }
 } else {

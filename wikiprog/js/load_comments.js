@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     comentarioDiv.className = 'col-lg-12 col-md-12 col-sm-12 mb-12'; // Ajusta las columnas según tus necesidades
 
                     const comentarioContainer = document.createElement('div');
-                    comentarioContainer.className = 'comentario-container  border rounded'; // Estilos de borde y redondez
+                    comentarioContainer.className = 'comentario-container border rounded'; // Estilos de borde y redondez
 
                     // Elementos para mostrar información del comentario
                     const usuario = document.createElement('h5');
@@ -43,12 +43,36 @@ document.addEventListener('DOMContentLoaded', function () {
                     const dislikes = document.createElement('p');
                     dislikes.textContent = `Dislikes: ${comentario.count_dislikes}`;
 
+                    // Botón de like
+                    const likeButton = document.createElement('button');
+                    likeButton.textContent = 'Like';
+                    likeButton.className = 'like-button';
+                    likeButton.addEventListener('click', function () {
+                        manejarInteraccion(comentario.comentario_id, 'like', function () {
+                            comentario.count_likes++;
+                            likes.textContent = `Likes: ${comentario.count_likes}`;
+                        });
+                    });
+
+                    // Botón de dislike
+                    const dislikeButton = document.createElement('button');
+                    dislikeButton.textContent = 'Dislike';
+                    dislikeButton.className = 'dislike-button';
+                    dislikeButton.addEventListener('click', function () {
+                        manejarInteraccion(comentario.comentario_id, 'dislike', function () {
+                            comentario.count_dislikes++;
+                            dislikes.textContent = `Dislikes: ${comentario.count_dislikes}`;
+                        });
+                    });
+
                     // Agregar elementos al contenedor del comentario
                     comentarioContainer.appendChild(usuario);
                     comentarioContainer.appendChild(fecha);
                     comentarioContainer.appendChild(contenido);
                     comentarioContainer.appendChild(likes);
                     comentarioContainer.appendChild(dislikes);
+                    comentarioContainer.appendChild(likeButton);
+                    comentarioContainer.appendChild(dislikeButton);
 
                     // Agregar contenedor de comentario al contenedor principal
                     comentarioDiv.appendChild(comentarioContainer);
@@ -58,5 +82,28 @@ document.addEventListener('DOMContentLoaded', function () {
             .catch(function (error) {
                 console.error('Error al cargar los comentarios:', error);
             });
+    }
+
+    /**
+     * Función para enviar una interacción de like o dislike al servidor.
+     * @param {number} comentarioId - ID del comentario a interactuar.
+     * @param {string} accion - Acción a realizar ('like' o 'dislike').
+     * @param {Function} callback - Función a ejecutar después de procesar la interacción.
+     */
+    function manejarInteraccion(comentarioId, accion, callback) {
+        // Realizar solicitud POST usando Axios
+        axios.post('../model/manejar_like_dislike.php', {
+            usuario_id: 1, // Ajusta esto según tu lógica para obtener el usuario_id
+            comentario_id: comentarioId,
+            accion: accion
+        })
+        .then(function (response) {
+            // Ejecutar el callback proporcionado para actualizar el frontend
+            callback();
+            console.log(`Interacción de ${accion} registrada correctamente.`);
+        })
+        .catch(function (error) {
+            console.error(`Error al procesar ${accion}:`, error);
+        });
     }
 });

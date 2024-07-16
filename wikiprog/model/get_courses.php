@@ -1,5 +1,6 @@
 <?php
 /**
+ * ../model/get_courses.php
  * Consulta y devuelve información de cursos en formato JSON.
  * 
  * Este script realiza una conexión a la base de datos MySQL, consulta la tabla 'curso' para obtener
@@ -14,7 +15,7 @@
 include 'db_config.php';
 
 // Consulta SQL para obtener cursos
-$sql = "SELECT curso_id, titulo_curso, descripcion, categoria_id FROM curso";
+$sql = "SELECT curso_id, titulo_curso, descripcion, categoria_id, fecha_registro FROM curso";
 $result = $conn->query($sql);
 
 $courses = array();

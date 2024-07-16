@@ -1,12 +1,10 @@
-// mensaje.js
-
-function mostrarMensaje(tipo) {
+function mostrarMensaje(tipo, texto = "") {
     switch(tipo) {
         case 'exito':
             Swal.fire({
                 position: "top-end",
                 icon: "success",
-                title: "Tu trabajo se ha guardado",
+                title: texto || "Tu trabajo se ha guardado",
                 showConfirmButton: false,
                 timer: 1500
             });
@@ -22,7 +20,7 @@ function mostrarMensaje(tipo) {
             Swal.fire({
                 icon: "error",
                 title: "Oops...",
-                text: "Algo salió mal. Inténtalo de nuevo.",
+                text: texto || "Algo salió mal. Inténtalo de nuevo.",
                 footer: '<a href="#">¿Por qué tengo este problema?</a>'
             });
             break;
@@ -30,7 +28,7 @@ function mostrarMensaje(tipo) {
             Swal.fire({
                 icon: "info",
                 title: "Información",
-                text: "Acción no especificada."
+                text: texto || "Acción no especificada."
             });
             break;
     }
