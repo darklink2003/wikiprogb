@@ -12,26 +12,20 @@
 
     <!-- Contenedor de cursos -->
     <div class="row mt-3">
-        <div id="cursos-container" class="row">
-            <!-- Los cursos se cargarán aquí dinámicamente -->
-        </div>
+        <div id="cursos-container"></div>
+        <div id="indicador-carga" style="display: none;">Cargando...</div>
+        <div id="error-container" style="color: red;"></div>
     </div>
 </div>
 
 <script type="text/template" id="curso-template">
-        <div class="curso col-md-3">
-            <h2 class="titulo-curso"></h2>
-            <p class="descripcion-curso"></p>
-            <div style="display: flex; align-items: center;">
-                <button type="button" class="btn btn-primary like-button" style="background-color: transparent; border-radius: 15px; border:none;">
-                    <img src="../css/img/like.png" alt="like">
-                </button>
-                <h2 class="numerodelike" style="margin: 0 10px;" value="<?php   ?>"></h2>
-                <button type="button" class="btn btn-primary dislike-button ml-2" style="background-color: transparent; border-radius: 15px; border:none;">
-                    <img src="../css/img/dislike.png" alt="dislike" >
-                </button>
-                <h2 class="numerodedislike" style="margin: 0 10px;" value="<?php   ?>"></h2>
-            </div>
-            <a href="#" class="ver-lecciones-link">Ver lecciones</a>
-        </div>
+<div class="curso">
+        <h2 class="titulo-curso"></h2>
+        <p class="descripcion-curso"></p>
+        <p>Likes: <span class="numerodelike"></span></p>
+        <p>Dislikes: <span class="numerodedislike"></span></p>
+        <button class="like-button">Like</button>
+        <button class="dislike-button">Dislike</button><br>
+        <a class="ver-lecciones-link" href="#">Ver lecciones</a>
+    </div>
     </script>

@@ -28,40 +28,40 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Columna 1: Nombre del curso
             const col1Div = document.createElement('div');
-            col1Div.classList.add('col-md-4');
+            col1Div.classList.add('col-md-3', 'col-sm-6'); // Ajuste de tamaño para diferentes dispositivos
             const nombreCurso = document.createElement('p');
             nombreCurso.innerHTML = `<strong>Curso:</strong> ${inscripcion.titulo_curso}`;
             col1Div.appendChild(nombreCurso);
 
             // Columna 2: Nota
             const col2Div = document.createElement('div');
-            col2Div.classList.add('col-md-2');
+            col2Div.classList.add('col-md-2', 'col-sm-6'); // Ajuste de tamaño para diferentes dispositivos
             const nota = document.createElement('p');
             nota.innerHTML = `<strong>Nota:</strong> ${inscripcion.nota}`;
             col2Div.appendChild(nota);
 
             // Columna 3: Fecha de registro
             const col3Div = document.createElement('div');
-            col3Div.classList.add('col-md-3');
+            col3Div.classList.add('col-md-4');
             const fechaRegistro = document.createElement('p');
             fechaRegistro.innerHTML = `<strong>Fecha de Registro:</strong> ${inscripcion.fecha_registro}`;
             col3Div.appendChild(fechaRegistro);
 
             // Columna 4: Acciones
             const col4Div = document.createElement('div');
-            col4Div.classList.add('col-md-3', 'text-end');
+            col4Div.classList.add('col-md-3', 'col-sm-12', 'text-end'); // Ajuste de tamaño para diferentes dispositivos
 
             // Enlace para ir al curso
             const enlaceCurso = document.createElement('a');
             enlaceCurso.textContent = 'Ir al curso';
-            enlaceCurso.href = `../controller/controlador.php?seccion=seccion7&curso_id=${inscripcion.curso_id}`; // Usar inscripcion.curso_id en lugar de curso.curso_id
+            enlaceCurso.href = `../controller/controlador.php?seccion=seccion7&curso_id=${inscripcion.curso_id}`;
             enlaceCurso.classList.add('btn', 'btn-info', 'btn-sm', 'ms-1');
             col4Div.appendChild(enlaceCurso);
 
-            // Enlace para imprimir el certificado
+            // Enlace para Abrir el certificado
             const enlaceCertificado = document.createElement('a');
-            enlaceCertificado.textContent = 'Imprimir Certificado';
-            enlaceCertificado.href = `../certificado.php?inscripcion_id=${inscripcion.inscripcion_id}`;
+            enlaceCertificado.textContent = 'Abrir Certificado';
+            enlaceCertificado.href = `../controller/controlador.php?seccion=seccion15&inscripción_id=${inscripcion.inscripción_id}`;
             enlaceCertificado.classList.add('btn', 'btn-success', 'btn-sm', 'ms-1');
             col4Div.appendChild(enlaceCertificado);
 
@@ -87,6 +87,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // Manejo de errores en la solicitud GET
         console.error('Error al cargar las inscripciones:', error);
         const inscripcionesContainer = document.getElementById('inscripcion-container');
+        inscripcionesContainer.innerHTML = ''; // Limpiar el contenedor antes de mostrar el mensaje de error
         const errorMsg = document.createElement('p');
         errorMsg.textContent = 'Hubo un error al cargar las inscripciones. Por favor, intenta nuevamente más tarde.';
         errorMsg.style.color = '#f8f9fa';

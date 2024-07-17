@@ -21,7 +21,7 @@ if ($conn->connect_error) {
 // Obtener el usuario_id de la sesión
 $usuario_id = $_SESSION['usuario_id'];
 
-// Consulta SQL para obtener los datos del usuario incluyendo la ruta de la imagen
+// Consulta SQL para obtener los datos del usuario incluyendo el rango de usuario
 $sql = "SELECT usuario, correo, biografia, img_usuario, rango_id FROM usuario WHERE usuario_id = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $usuario_id);
@@ -46,6 +46,7 @@ if ($result->num_rows > 0) {
                     break;
             }
         }
+
         ?>
         <div class="container">
             <div class="container_titulo">
@@ -104,28 +105,34 @@ if ($result->num_rows > 0) {
                     </div>
                     <div class="col-md-7 d-flex flex-column align-items-center">
                         <div id="columna2" class="div">
-                            <h5 style="color: white; text-align: center;">Cargar mi proyecto</h5>
-                            <ul style="list-style-type: none; padding: 0;">
-                            <li><a class="dropdown-item" href="controlador.php?seccion=seccion6"
-                                        style="color: white; text-decoration: none;">Administrador
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="controlador.php?seccion=seccion3&usuario_id=<?php echo htmlspecialchars($usuario_id); ?>"
-                                        style="color: white; text-decoration: none;">Tus Cursos
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="nav-link" href="controlador.php?seccion=seccion4"
-                                        style="color: white; text-decoration: none;">Cursos</a>
-                                </li>
-                            </ul>
+                            <?php if ($row["rango_id"] == 1) { ?>
+                                <h5 style="color: white; text-align: center;">Bienvenido a Wikirpog</h5>
+                                <p style="color: white; text-align: center;">
+                                    Bienvenido a Wikiprog, una plataforma gratuita de tutoriales interactivos. Aquí puedes explorar
+                                    una variedad de cursos y aprender nuevas habilidades. ¡Disfruta interactuando con nuestros
+                                    cursos y descubre todo lo que tenemos para ofrecer!
+                                </p>
+                            <?php } else { ?>
+                                <h5 style="color: white; text-align: center;">Acciones</h5>
+                                <ul style="list-style-type: none; padding: 0;">
+                                    <li><a class="btn btn-primary" href="controlador.php?seccion=seccion6"
+                                            style="color: white; text-decoration: none; display: block; padding: 10px;">Administrador</a>
+                                    </li><br>
+                                    <li><a class="btn btn-primary"
+                                            href="controlador.php?seccion=seccion3&usuario_id=<?php echo htmlspecialchars($usuario_id); ?>"
+                                            style="color: white; text-decoration: none; display: block; padding: 10px;">Tus
+                                            Cursos</a></li><br>
+                                    <li><a class="btn btn-primary" href="controlador.php?seccion=seccion4"
+                                            style="color: white; text-decoration: none; display: block; padding: 10px;">Cursos</a>
+                                    </li>
+                                </ul>
+                            <?php } ?>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        
+
         <?php
     }
 } else {

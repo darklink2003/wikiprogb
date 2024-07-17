@@ -4,10 +4,10 @@
  * 
  * Este script recibe un parámetro GET 'q' que contiene el término de búsqueda.
  * Realiza una consulta a la base de datos para buscar cursos cuyo título o descripción
- * contenga el término de búsqueda. Luego, devuelve los resultados encontrados en formato JSON.
+ * contenga el término de búsqueda y que no estén bloqueados (bloqueo != 1). Luego, devuelve los resultados encontrados en formato JSON.
  * 
- * @version 1.0
- * @author Tu Nombre
+ * @version 1.1
+ * author Tu Nombre
  */
 
 include 'db_config.php';  // Incluir archivo de configuración de la base de datos
@@ -15,8 +15,10 @@ include 'db_config.php';  // Incluir archivo de configuración de la base de dat
 // Obtener el término de búsqueda desde el parámetro GET 'q'
 $searchTerm = $_GET['q'] ?? '';
 
-// Preparar la consulta SQL para buscar cursos por título o descripción que contenga el término de búsqueda
-$sql = "SELECT curso_id, titulo_curso, descripcion FROM curso WHERE titulo_curso LIKE ? OR descripcion LIKE ?";
+// Preparar la consulta SQL para buscar cursos por título o descripción que contenga el término de búsqueda y no estén bloqueados
+$sql = "SELECT curso_id, titulo_curso, descripcion 
+        FROM curso 
+        WHERE (titulo_curso LIKE ? OR descripcion LIKE ?) AND bloqueo != 1";
 $stmt = $conn->prepare($sql);
 
 // Preparar los parámetros de búsqueda para evitar SQL injection

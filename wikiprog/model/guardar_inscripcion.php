@@ -59,7 +59,7 @@ $stmt->bind_param("iisssss", $curso_id, $usuario_id, $nombre, $correo, $genero, 
 $ejecucion = $stmt->execute();
 
 if ($ejecucion) {
-    header("Location: ../controller/controlador.php?seccion=seccion8&curso_id=${curso_id}");
+    header("Location: ../controller/controlador.php?seccion=seccion3&usuario_id=${usuario_id}");
     exit(); // Asegura que el script se detenga después de la redirección
 } else {
     die('Error en la ejecución de la consulta de inserción: ' . $stmt->error);

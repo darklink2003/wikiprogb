@@ -15,12 +15,13 @@ if (!isset($_SESSION['usuario_id'])) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Obtener y sanitizar los datos enviados
     $curso_id = $_POST['curso_id'];
-    $titulo_curso = !empty($_POST['titulo_curso']) ? trim(mysqli_real_escape_string($conn, $_POST['titulo_curso'])) : null;
+    $titulo_curso = !empty($_POST['titulo']) ? trim(mysqli_real_escape_string($conn, $_POST['titulo'])) : null;
     $descripcion = !empty($_POST['descripcion']) ? trim(mysqli_real_escape_string($conn, $_POST['descripcion'])) : null;
-    $categoria_id = !empty($_POST['categoria_id']) ? $_POST['categoria_id'] : null;
+    $categoria_id = !empty($_POST['categoria']) ? $_POST['categoria'] : null;
+    $bloqueo = isset($_POST['bloqueo']) ? $_POST['bloqueo'] : null;
 
     // Validar que al menos uno de los campos del curso no esté vacío
-    if (is_null($titulo_curso) && is_null($descripcion) && is_null($categoria_id)) {
+    if (is_null($titulo_curso) && is_null($descripcion) && is_null($categoria_id) && is_null($bloqueo)) {
         echo "Debe proporcionar al menos un campo para actualizar.";
         exit;
     }
@@ -45,6 +46,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $params[] = $categoria_id;
         $types .= 'i';
     }
+    if (!is_null($bloqueo)) {
+        $updates[] = 'bloqueo = ?';
+        $params[] = $bloqueo;
+        $types .= 'i';
+    }
+
 
     $params[] = $curso_id;
     $types .= 'i';
@@ -72,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Verificar y mover cada archivo de lección
     if (isset($_FILES['lecciones'])) {
         $uploadDir = '../archivos_leccion/';
-        
+
         // Recorrer cada lección enviada
         foreach ($_FILES['lecciones']['tmp_name'] as $index => $tmpNames) {
             foreach ($tmpNames as $field => $tmpName) {

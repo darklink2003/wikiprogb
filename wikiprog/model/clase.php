@@ -63,7 +63,6 @@ class Login
         $salida .= '<thead class="table-dark">';
         $salida .= '<tr>';
         $salida .= '<th scope="col">Usuario</th>';
-        $salida .= '<th scope="col">Imagen</th>';
         $salida .= '<th scope="col">Correo</th>';
         $salida .= '<th scope="col">Biografía</th>';
         $salida .= '<th scope="col">Rango</th>';
@@ -91,7 +90,6 @@ class Login
 
             $salida .= '<tr>';
             $salida .= '<td>' . htmlspecialchars($fila['usuario'], ENT_QUOTES, 'UTF-8') . '</td>';
-            $salida .= '<td>' . htmlspecialchars($fila['img_usuario'], ENT_QUOTES, 'UTF-8') . '</td>';
             $salida .= '<td>' . htmlspecialchars($fila['correo'], ENT_QUOTES, 'UTF-8') . '</td>';
             $salida .= '<td>' . htmlspecialchars($fila['biografia'], ENT_QUOTES, 'UTF-8') . '</td>';
             $salida .= '<td>' . $rango_texto . '</td>';
@@ -129,7 +127,7 @@ class Login
         $salida = "";
 
         // Consulta SQL para seleccionar todos los cursos de la tabla 'curso'
-        $sql = "SELECT curso_id, titulo_curso, descripcion, categoria_id, fecha_registro, megusta, dislike, usuario_id FROM curso";
+        $sql = "SELECT curso_id, titulo_curso, descripcion, categoria_id, interaciocurso, usuario_id, bloqueo, fecha_registro FROM curso";
 
         // Ejecución de la consulta
         $consulta = $conn->query($sql);
@@ -148,12 +146,11 @@ class Login
         $salida .= '<th scope="col">Titulo</th>';
         $salida .= '<th scope="col">Descripcion</th>';
         $salida .= '<th scope="col">Categoria</th>';
-        $salida .= '<th scope="col">Fecha Registro</th>';
-        $salida .= '<th scope="col">Megusta</th>';
-        $salida .= '<th scope="col">Dislike</th>';
+        $salida .= '<th scope="col">Interaciones</th>';
         $salida .= '<th scope="col">Usuario</th>';
+        $salida .= '<th scope="col">Bloqueo</th>';
+        $salida .= '<th scope="col">Fecha Registro</th>';
         $salida .= '<th scope="col">Editar</th>';
-        $salida .= '<th scope="col">Eliminar</th>';
         $salida .= '</tr>';
         $salida .= '</thead>';
         $salida .= '<tbody>';
@@ -171,16 +168,21 @@ class Login
                                     ($fila["categoria_id"] == 6 ? "AJAX" : "Desconocido"))))))
                 : "Desconocido";
 
+            // Convertir el valor de bloqueo a texto
+            $bloqueo_texto = isset($fila["bloqueo"]) ?
+                ($fila["bloqueo"] == 1 ? "Bloqueada" :
+                    ($fila["bloqueo"] == 0 ? "En línea" : "Desconocido"))
+                : "Desconocido";
+
             $salida .= '<tr>';
             $salida .= '<td>' . htmlspecialchars($fila['titulo_curso'], ENT_QUOTES, 'UTF-8') . '</td>';
             $salida .= '<td>' . htmlspecialchars($fila['descripcion'], ENT_QUOTES, 'UTF-8') . '</td>';
             $salida .= '<td>' . $categoria_texto . '</td>';
-            $salida .= '<td>' . htmlspecialchars($fila['fecha_registro'], ENT_QUOTES, 'UTF-8') . '</td>';
-            $salida .= '<td>' . htmlspecialchars($fila['megusta'], ENT_QUOTES, 'UTF-8') . '</td>';
-            $salida .= '<td>' . htmlspecialchars($fila['dislike'], ENT_QUOTES, 'UTF-8') . '</td>';
+            $salida .= '<td>' . htmlspecialchars($fila['interaciocurso'], ENT_QUOTES, 'UTF-8') . '</td>';
             $salida .= '<td>' . htmlspecialchars($fila['usuario_id'], ENT_QUOTES, 'UTF-8') . '</td>';
+            $salida .= '<td>' . $bloqueo_texto . '</td>';
+            $salida .= '<td>' . htmlspecialchars($fila['fecha_registro'], ENT_QUOTES, 'UTF-8') . '</td>';
             $salida .= '<td><a href="../controller/controlador.php?seccion=seccion14&id=' . $curso_id . '" class="btn btn-primary btn-sm">Editar</a></td>';
-            $salida .= '<td><a href="../model/eliminar_curso.php?id=' . $curso_id . '" class="btn btn-danger btn-sm">Eliminar</a></td>';
             $salida .= '</tr>';
         }
 
@@ -240,7 +242,6 @@ class Login
         $salida .= '<th scope="col">Cursos Anteriores</th>';
         $salida .= '<th scope="col">Nota</th>';
         $salida .= '<th scope="col">Fecha Registro</th>';
-        $salida .= '<th scope="col">Eliminar</th>';
         $salida .= '</tr>';
         $salida .= '</thead>';
         $salida .= '<tbody>';
@@ -268,7 +269,6 @@ class Login
             $salida .= '<td>' . $cursos_anteriores . '</td>';
             $salida .= '<td>' . $nota . '</td>';
             $salida .= '<td>' . $fecha_registro . '</td>';
-            $salida .= '<td><a href="../model/eliminar_curso.php?id=' . $inscripción_id . '" class="btn btn-danger btn-sm">Eliminar</a></td>';
             $salida .= '</tr>';
         }
 

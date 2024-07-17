@@ -1,11 +1,11 @@
 // funciones.js
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     cargarCursos(); // Cargar cursos al cargar la página
 
     const formBusqueda = document.getElementById('form-busqueda');
 
-    formBusqueda.addEventListener('submit', function(event) {
+    formBusqueda.addEventListener('submit', function (event) {
         event.preventDefault(); // Evitar el envío por defecto del formulario
 
         const formData = new FormData(formBusqueda);
@@ -23,14 +23,28 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function cargarCursos() {
+    mostrarIndicadorCarga(true);
     fetch('../model/get_courses.php')
         .then(response => response.json())
         .then(data => {
+            mostrarIndicadorCarga(false);
             renderCursos(data);
         })
         .catch(error => {
-            console.error('Error fetching courses:', error);
+            mostrarIndicadorCarga(false);
+            mostrarMensajeError('Error fetching courses:', error);
         });
+}
+
+function mostrarIndicadorCarga(mostrar) {
+    const indicadorCarga = document.getElementById('indicador-carga');
+    indicadorCarga.style.display = mostrar ? 'block' : 'none';
+}
+
+function mostrarMensajeError(mensaje, error) {
+    const errorContainer = document.getElementById('error-container');
+    errorContainer.textContent = mensaje;
+    console.error(error);
 }
 
 function renderCursos(data) {
@@ -60,20 +74,13 @@ function renderCursos(data) {
 }
 
 function likeCurso(cursoDiv, cursoId) {
-    // Lógica para manejar el like
-    console.log(`Liked course ID: ${cursoId}`);
-    // Actualizar contador de likes en la interfaz
-    const likeCount = cursoDiv.querySelector('.numerodelike');
-    likeCount.textContent = parseInt(likeCount.textContent) + 1;
+    // Implementar la lógica para "likear" un curso
 }
 
 function dislikeCurso(cursoDiv, cursoId) {
-    // Lógica para manejar el dislike
-    console.log(`Disliked course ID: ${cursoId}`);
-    // Actualizar contador de dislikes en la interfaz
-    const dislikeCount = cursoDiv.querySelector('.numerodedislike');
-    dislikeCount.textContent = parseInt(dislikeCount.textContent) + 1;
+    // Implementar la lógica para "dislikear" un curso
 }
+
 
 function cargarLecciones(cursoId) {
     fetch(`../model/get_lessons.php?curso_id=${cursoId}`)
@@ -143,8 +150,3 @@ function eliminarLeccion(button) {
     leccion.remove();
 }
 
-function eliminarCurso() {
-    if (confirm("¿Estás seguro de que deseas eliminar el curso? Esta acción no se puede deshacer.")) {
-        // Aquí puedes agregar la lógica para eliminar el curso
-    }
-}

@@ -4,18 +4,20 @@
  * Consulta y devuelve información de cursos en formato JSON.
  * 
  * Este script realiza una conexión a la base de datos MySQL, consulta la tabla 'curso' para obtener
- * el ID del curso, título y descripción de cada curso disponible. Luego, cierra la conexión y
- * devuelve los datos obtenidos en formato JSON.
+ * el ID del curso, título, descripción, interacciones, bloqueo, fecha de registro y otros detalles de cada curso disponible.
+ * Luego, cierra la conexión y devuelve los datos obtenidos en formato JSON.
  *
- * @version 1.0
- * @autor Pablo Alexander Mondragon Acevedo
+ * @version 1.1
+ * author Pablo Alexander Mondragon Acevedo
  */
 
 // Incluir el archivo de configuración de la base de datos
 include 'db_config.php';
 
-// Consulta SQL para obtener cursos
-$sql = "SELECT curso_id, titulo_curso, descripcion, categoria_id, fecha_registro FROM curso";
+// Consulta SQL para obtener cursos que no están bloqueados
+$sql = "SELECT curso_id, titulo_curso, descripcion, categoria_id, interaciocurso, bloqueo, fecha_registro 
+        FROM curso 
+        WHERE bloqueo != 1";
 $result = $conn->query($sql);
 
 $courses = array();
