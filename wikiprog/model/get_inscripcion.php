@@ -1,6 +1,6 @@
 <?php
 /**
- * get_inscripciones.php
+ * get_inscripcion.php
  * Consulta y devuelve las inscripciones asociadas a un usuario específico en formato JSON,
  * incluyendo detalles como el nombre del curso, nota y fecha de registro.
  */

@@ -9,8 +9,8 @@ if (isset($_GET['usuario_id'])) {
 ?>
 
 
-<div class="container-archivos">
-  <h2>Mostrar Archivos</h2>
+<div class="container-inscripcion">
+  <h2>Mostrar Inscripciones</h2>
   <div id="inscripcion-container" class="inscripcion-container">
     <!-- Aquí se cargarán dinámicamente los archivos -->
   </div>

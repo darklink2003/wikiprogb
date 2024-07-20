@@ -112,19 +112,44 @@ if ($result->num_rows > 0) {
                                     una variedad de cursos y aprender nuevas habilidades. ¡Disfruta interactuando con nuestros
                                     cursos y descubre todo lo que tenemos para ofrecer!
                                 </p>
+                                <ul style="list-style-type: none; padding: 0;">
+                                    <li>
+                                        <a class="btn btn-primary"
+                                            href="controlador.php?seccion=seccion3&usuario_id=<?php echo htmlspecialchars($usuario_id); ?>"
+                                            style="color: white; text-decoration: none; display: block; padding: 10px;">Tus Cursos
+                                        </a>
+                                    </li><br>
+
+
+                                </ul>
+                            <?php } elseif ($row["rango_id"] == 3) { ?>
+                                <h5 style="color: white; text-align: center;">Opciones Especiales</h5>
+                                <ul style="list-style-type: none; padding: 0;">
+
+                                    <li>
+                                        <a class="btn btn-primary"
+                                            href="controlador.php?seccion=seccion3&usuario_id=<?php echo htmlspecialchars($usuario_id); ?>"
+                                            style="color: white; text-decoration: none; display: block; padding: 10px;">Tus
+                                            Cursos
+                                        </a>
+                                    </li><br>
+                                    <li><a class="btn btn-primary" href="controlador.php?seccion=seccion4"
+                                            style="color: white; text-decoration: none; display: block; padding: 10px;">Cursos</a>
+                                    </li>
+                                </ul>
                             <?php } else { ?>
                                 <h5 style="color: white; text-align: center;">Acciones</h5>
                                 <ul style="list-style-type: none; padding: 0;">
                                     <li><a class="btn btn-primary" href="controlador.php?seccion=seccion6"
                                             style="color: white; text-decoration: none; display: block; padding: 10px;">Administrador</a>
                                     </li><br>
-                                    <li><a class="btn btn-primary"
+                                    <li>
+                                        <a class="btn btn-primary"
                                             href="controlador.php?seccion=seccion3&usuario_id=<?php echo htmlspecialchars($usuario_id); ?>"
-                                            style="color: white; text-decoration: none; display: block; padding: 10px;">Tus
-                                            Cursos</a></li><br>
-                                    <li><a class="btn btn-primary" href="controlador.php?seccion=seccion4"
-                                            style="color: white; text-decoration: none; display: block; padding: 10px;">Cursos</a>
-                                    </li>
+                                            style="color: white; text-decoration: none; display: block; padding: 10px;">Tus Cursos
+                                        </a>
+                                    </li><br>
+
                                 </ul>
                             <?php } ?>
                         </div>

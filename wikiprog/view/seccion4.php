@@ -34,47 +34,92 @@
                     $conn->close();
                     ?>
                 </select>
-                <button type="button" onclick="eliminarCurso()" class="btn btn-danger"
-                    style="border-radius: 10px;height:40%;width:90%;margin-left:10px;">Eliminar curso</button>
             </div>
         </div>
 
         <br>
-        <!-- Contenedor de lecciones -->
-        <div class="contenedorleccion"
-            style="display: flex; flex-wrap: wrap; background-color:#1a1924; border-radius:10px; padding: 10px;">
-            <div class="row">
+        <!-- Contenedor de secciones de lecciones y pruebas -->
+        <div class="contenedor_secciones">
+            <!-- Sección de lecciones -->
+            <div class="seccion-lecciones">
                 <h3 style="color: white;">Lecciones</h3>
-            </div><br>
-            <div class="row">
-                <div class="row">
-                    <div id="lecciones">
-                        <!-- Aquí se agregarán las lecciones dinámicamente -->
-                    </div><br>
+                <div id="lecciones">
+                    <!-- Aquí se agregarán las lecciones dinámicamente -->
                 </div>
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-6">
                         <button type="button" onclick="agregarLeccion()" class="btn btn-primary"
                             style="margin-top: 10px; border-radius: 10px;">Agregar otra lección</button>
                     </div>
                 </div>
             </div>
+
+            <!-- Sección de pruebas -->
+            <div class="seccion-pruebas">
+                <h3 style="color: white;">Pruebas</h3>
+                <div id="pruebas">
+                    <!-- Aquí se agregarán las pruebas dinámicamente -->
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <button type="button" onclick="agregarPrueba()" class="btn btn-primary"
+                            style="margin-top: 10px; border-radius: 10px;">Agregar otra prueba</button>
+                    </div>
+                </div>
+            </div>
         </div>
+
         <br>
         <!-- Botón de envío del formulario -->
         <input type="submit" value="Enviar" class="btn btn-success">
     </form>
 </div>
 
-<!-- Plantilla de curso para el frontend -->
-<script type="text/template" id="curso-template">
-    <div class="curso">
-        <h2 class="titulo-curso"></h2>
-        <p class="descripcion-curso"></p>
-        <button class="like-button">Me gusta</button>
-        <button class="dislike-button">No me gusta</button>
-        <a href="#" class="ver-lecciones-link">Ver lecciones</a>
-    </div>
+<!-- Script JavaScript para agregar dinámicamente campos de prueba -->
+<script>
+    var numPruebas = 0;
+
+    function agregarPrueba() {
+        numPruebas++;
+
+        var divPrueba = document.createElement("div");
+        divPrueba.setAttribute("class", "prueba");
+        divPrueba.setAttribute("style", "margin-top: 10px;");
+
+        var tituloInput = document.createElement("input");
+        tituloInput.setAttribute("type", "text");
+        tituloInput.setAttribute("name", "titulo_prueba[]");
+        tituloInput.setAttribute("placeholder", "Título de la prueba");
+        tituloInput.setAttribute("class", "form-control");
+        tituloInput.setAttribute("style", "border-radius: 10px;");
+
+        var contenidoTextarea = document.createElement("textarea");
+        contenidoTextarea.setAttribute("name", "contenido_prueba[]");
+        contenidoTextarea.setAttribute("placeholder", "Contenido de la prueba");
+        contenidoTextarea.setAttribute("class", "form-control");
+        contenidoTextarea.setAttribute("rows", "3");
+        contenidoTextarea.setAttribute("style", "margin-top: 10px; border-radius: 10px;");
+
+        var archivoInput = document.createElement("input");
+        archivoInput.setAttribute("type", "file");
+        archivoInput.setAttribute("name", "archivo_prueba[]");
+        archivoInput.setAttribute("class", "form-control");
+        archivoInput.setAttribute("style", "margin-top: 10px; border-radius: 10px;");
+
+        var eliminarBtn = document.createElement("button");
+        eliminarBtn.setAttribute("type", "button");
+        eliminarBtn.setAttribute("class", "btn btn-danger");
+        eliminarBtn.setAttribute("style", "margin-top: 10px; border-radius: 10px;");
+        eliminarBtn.textContent = "Eliminar prueba";
+        eliminarBtn.onclick = function() {
+            divPrueba.remove();
+        };
+
+        divPrueba.appendChild(tituloInput);
+        divPrueba.appendChild(contenidoTextarea);
+        divPrueba.appendChild(archivoInput);
+        divPrueba.appendChild(eliminarBtn);
+
+        document.getElementById("pruebas").appendChild(divPrueba);
+    }
 </script>
-
-

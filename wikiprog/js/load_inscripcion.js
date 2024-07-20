@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Columna 1: Nombre del curso
             const col1Div = document.createElement('div');
-            col1Div.classList.add('col-md-3', 'col-sm-6'); // Ajuste de tamaño para diferentes dispositivos
+            col1Div.classList.add('col-md-2', 'col-sm-6'); // Ajuste de tamaño para diferentes dispositivos
             const nombreCurso = document.createElement('p');
             nombreCurso.innerHTML = `<strong>Curso:</strong> ${inscripcion.titulo_curso}`;
             col1Div.appendChild(nombreCurso);
@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Columna 4: Acciones
             const col4Div = document.createElement('div');
-            col4Div.classList.add('col-md-3', 'col-sm-12', 'text-end'); // Ajuste de tamaño para diferentes dispositivos
+            col4Div.classList.add('col-md-4', 'col-sm-12', 'text-end'); // Ajuste de tamaño para diferentes dispositivos
 
             // Enlace para ir al curso
             const enlaceCurso = document.createElement('a');
@@ -58,10 +58,16 @@ document.addEventListener('DOMContentLoaded', function () {
             enlaceCurso.classList.add('btn', 'btn-info', 'btn-sm', 'ms-1');
             col4Div.appendChild(enlaceCurso);
 
+            // Enlace para ir al prueba
+            const enlacePrueba = document.createElement('a');
+            enlacePrueba.textContent = 'Ir a la prueba';
+            enlacePrueba.href = `../controller/controlador.php?seccion=seccion16&curso_id=${inscripcion.curso_id}&inscripción_id=${inscripcion.inscripción_id}`;
+            enlacePrueba.classList.add('btn', 'btn-danger', 'btn-sm', 'ms-1');
+            col4Div.appendChild(enlacePrueba);
             // Enlace para Abrir el certificado
             const enlaceCertificado = document.createElement('a');
             enlaceCertificado.textContent = 'Abrir Certificado';
-            enlaceCertificado.href = `../controller/controlador.php?seccion=seccion15&inscripción_id=${inscripcion.inscripción_id}`;
+            enlaceCertificado.href = `../controller/controlador.php?seccion=seccion15&usuario_id=${usuario_id}`;
             enlaceCertificado.classList.add('btn', 'btn-success', 'btn-sm', 'ms-1');
             col4Div.appendChild(enlaceCertificado);
 

@@ -145,8 +145,4 @@ function agregarLeccion() {
     leccionesDiv.appendChild(tempDiv.firstChild);
 }
 
-function eliminarLeccion(button) {
-    const leccion = button.parentElement.parentElement;
-    leccion.remove();
-}
 
