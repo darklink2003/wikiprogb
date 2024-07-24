@@ -17,7 +17,7 @@ $seccion = preg_replace('/[^a-zA-Z0-9_]/', '', $seccion);
 $usuario_id = $_SESSION['usuario_id'] ?? '';
 
 // Redirigir a la página de inicio de sesión si no ha iniciado sesión y trata de acceder a una sección restringida
-$public_sections = ['seccion5', 'seccion2']; // Agregar aquí las secciones públicas
+$public_sections = ['seccion5', 'seccion2', 'seccion17']; // Agregar aquí las secciones públicas
 if (empty($usuario_id) && !in_array($seccion, $public_sections)) {
     session_regenerate_id(true); // Regenerar ID de sesión para seguridad adicional
     header("Location: controlador.php?seccion=seccion2");
@@ -48,57 +48,63 @@ if (empty($usuario_id) && !in_array($seccion, $public_sections)) {
         gtag('js', new Date());
         gtag('config', 'G-GQJG3209SE');
     </script>
+    <?php include '../controller/mensajes.php'; ?> <!-- Incluir el archivo de mensajes -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 </head>
 
 <body>
 
-<!-- Barra de navegación -->
-<?php if ($seccion !== 'seccion2'): ?>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="controlador.php?seccion=seccion1">WikiProg</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+    <!-- Barra de navegación -->
+    <?php if ($seccion !== 'seccion2'): ?>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="controlador.php?seccion=seccion1">WikiProg</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link" href="controlador.php?seccion=seccion1">Explorar</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="controlador.php?seccion=seccion2">Visual Code</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="controlador.php?seccion=seccion3">Foro</a>
-                    </li>
-                    <li class="nav-item">
-                    </li>
-                </ul>
-                <div class="d-flex align-items-center">
-                    <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" href="controlador.php?seccion=seccion1">Explorar</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="controlador.php?seccion=seccion2">Visual Code</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="controlador.php?seccion=seccion3">Foro</a>
+                        </li>
+                        <li class="nav-item">
+                        </li>
+                    </ul>
+                    <div class="d-flex align-items-center">
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
                                 data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="../css/img/usuario.png" alt="Usuario" class="img-fluid" style="width: 30px;">
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
-                            <li><b>ESTADO</b>
-                                <?php echo isset($_SESSION['usuario_id']) ? 'Activo' : 'Inactivo'; ?>
-                            </li>
-                            <li><a class="dropdown-item" href="controlador.php?seccion=seccion9">Tu Perfil</a></li>
+                                <img src="../css/img/usuario.png" alt="Usuario" class="img-fluid" style="width: 30px;">
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
+                                <li><b>ESTADO</b>
+                                    <?php echo isset($_SESSION['usuario_id']) ? 'Activo' : 'Inactivo'; ?>
+                                </li>
+                                <li><a class="dropdown-item" href="controlador.php?seccion=seccion9">Tu Perfil</a></li>
 
-                            <li><a class="dropdown-item" href="controlador.php?seccion=seccion12&usuario_id=<?php echo htmlspecialchars($usuario_id); ?>">Tu Nube</a></li>
-                            <li><a class="dropdown-item" href="controlador.php?seccion=seccion5"><b>Registro</b></a></li>
-                            <li><a class="dropdown-item" href="controlador.php?seccion=seccion10">Configuración</a></li>
-                            <li><a class="dropdown-item" href="controlador.php?seccion=seccion11">Ayuda</a></li>
-                            <li><a class="dropdown-item" href="logout.php">Cerrar Sesión</a></li>
-                        </ul>
+                                <li><a class="dropdown-item"
+                                        href="controlador.php?seccion=seccion12&usuario_id=<?php echo htmlspecialchars($usuario_id); ?>">Tu
+                                        Nube</a></li>
+                                <li><a class="dropdown-item" href="controlador.php?seccion=seccion5"><b>Registro</b></a>
+                                </li>
+                                <li><a class="dropdown-item" href="controlador.php?seccion=seccion10">Configuración</a></li>
+                                <li><a class="dropdown-item" href="controlador.php?seccion=seccion11">Ayuda</a></li>
+                                <li><a class="dropdown-item" href="logout.php">Cerrar Sesión</a></li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </nav>
-<?php endif; ?>
+        </nav>
+    <?php endif; ?>
 
     <!-- Contenido de la sección -->
     <div class="container" style="margin-top:50px;">
@@ -119,11 +125,12 @@ if (empty($usuario_id) && !in_array($seccion, $public_sections)) {
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="../js/load_prueba.js"></script>
+    <script src="../js/load_usuario.js"></script>
     <script src="../js/load_certificado.js"></script>
     <script src="../js/load_inscripcion.js"></script>
     <script src="../js/load_archivos.js"></script>
     <script src="../js/load_comments.js"></script>
-    <script src="../js/mensaje.js"></script>
+    <script src="../js/mensajes.js"></script>
     <script src="../js/scripts.js"></script>
     <script src="../js/perfil.js"></script>
     <script src="../js/funciones.js"></script>

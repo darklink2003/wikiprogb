@@ -12,6 +12,7 @@
  */
 -->
 
+
 <!-- Estructura principal del formulario -->
 <div class="container">
     <div class="row justify-content-center">
@@ -53,9 +54,6 @@
                                 <button class="btn btn-outline-secondary" type="button" id="refresh-code">↻</button>
                             </div>
                         </div>
-
-                        <!-- Contenedor para mensajes -->
-                        <div id="mensaje-container"></div>
 
                         <!-- Botón para enviar el formulario -->
                         <div class="d-grid">

@@ -1,7 +1,7 @@
-// load_pruebas.js
 document.addEventListener('DOMContentLoaded', function () {
     const urlParams = new URLSearchParams(window.location.search);
     const curso_id = urlParams.get('curso_id');
+    const inscripción_id = urlParams.get('inscripción_id'); // Asegúrate de pasar este valor en la URL o definirlo de alguna manera
 
     function cargarPruebas(curso_id) {
         if (!curso_id) {
@@ -57,6 +57,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
                         pruebasContainer.appendChild(pruebaItem);
                     });
+
+                    // Establece el valor de prueba_id en el formulario
+                    document.getElementById('prueba_id').value = response.data[0].prueba_id; // Asigna el primer id de prueba; ajusta según tu lógica
+
                 } else {
                     // Mostrar mensaje si no se encontraron pruebas
                     const noPruebasMsg = document.createElement('p');
@@ -76,4 +80,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Llamar a la función para cargar pruebas al cargar la página
     cargarPruebas(curso_id);
+
+    // Establece el valor de inscripción_id en el formulario
+    const inscripcionInput = document.getElementById('inscripción_id');
+    if (inscripción_id) {
+        inscripcionInput.value = inscripción_id;
+    } else {
+        console.error('No se proporcionó un inscripción_id válido.');
+    }
 });

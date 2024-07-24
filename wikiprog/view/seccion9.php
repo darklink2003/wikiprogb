@@ -133,6 +133,11 @@ if ($result->num_rows > 0) {
                                             Cursos
                                         </a>
                                     </li><br>
+                                    <li>
+                                        <a class="btn btn-primary" href="controlador.php?seccion=seccion17&usuario_id=<?php echo htmlspecialchars($usuario_id); ?>"
+                                            style=" color: white; text-decoration: none; display: block; padding:
+                                            10px;">Evaluar</a>
+                                    </li><br>
                                     <li><a class="btn btn-primary" href="controlador.php?seccion=seccion4"
                                             style="color: white; text-decoration: none; display: block; padding: 10px;">Cursos</a>
                                     </li>
