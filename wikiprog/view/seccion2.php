@@ -64,7 +64,10 @@
                         <div class="mt-3 text-center">
                             <a href="controlador.php?seccion=seccion5" class="btn btn-link">Registrarse</a>
                         </div>
-
+                        <!-- Enlace para redirigir al usuario a la página de recuperacion de contraseña -->
+                        <div class="mt-3 text-center">
+                            <a href="controlador.php?seccion=seccion20" class="btn btn-link">recuperar contraseña</a>
+                        </div>
                     </form>
 
                     <!-- Mensaje de error en caso de que exista algún error -->

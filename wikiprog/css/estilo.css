@@ -216,3 +216,31 @@ background-color: #353349;
     width: 75%;
 }
 
+.archivo-container {
+  margin-bottom: 1px;
+  /* Espaciado entre contenedores */
+  padding: 10px;
+  /* Ajusta el relleno según sea necesario */
+  color: white;
+  /* Asegúrate de que el texto sea legible sobre el fondo oscuro */
+  border-radius: 5px 5px 5px 5px;
+}
+
+.archivo-container:last-child {
+  margin-bottom: 0;
+  /* Elimina el margen inferior del último contenedor */
+
+}
+
+.bg-custom-dark {
+  background-color: #232230;
+}
+
+.bg-custom-darker {
+  background-color: #121113;
+}
+
+.form-control-file {
+  color: white;
+  
+}

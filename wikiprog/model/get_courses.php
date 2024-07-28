@@ -15,7 +15,7 @@
 include 'db_config.php';
 
 // Consulta SQL para obtener cursos que no están bloqueados
-$sql = "SELECT curso_id, titulo_curso, descripcion, categoria_id, interaciocurso, bloqueo, fecha_registro 
+$sql = "SELECT curso_id, titulo_curso, descripcion, categoria_id, bloqueo, fecha_registro 
         FROM curso 
         WHERE bloqueo != 1";
 $result = $conn->query($sql);

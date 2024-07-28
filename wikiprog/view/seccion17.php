@@ -16,9 +16,9 @@ if (!isset($_SESSION['usuario_id'])) {
 $usuario_id = $_SESSION['usuario_id'];
 
 // Verificar si la clase y el método existen antes de llamarlos
-if (class_exists('login') && method_exists('login', 'vercursos2')) {
-    // Llamar al método estático vercursos2 de la clase login
-    $cursos = login::vercursos2($usuario_id);
+if (class_exists('Login') && method_exists('Login', 'vercursos2')) {
+    // Llamar al método estático vercursos2 de la clase Login
+    $cursos = Login::vercursos2($usuario_id);
 } else {
     $cursos = "<p>Error al cargar los cursos.</p>";
 }

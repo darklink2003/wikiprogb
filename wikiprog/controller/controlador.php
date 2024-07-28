@@ -43,7 +43,8 @@ if (isset($_GET['seccion'])) {
         'seccion16',
         'seccion17',
         'seccion18',
-        'seccion19'
+        'seccion19',
+        'seccion20'
     ];
 
     // Verificar si la sección solicitada está en el arreglo de secciones disponibles

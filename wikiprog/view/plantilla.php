@@ -17,7 +17,7 @@ $seccion = preg_replace('/[^a-zA-Z0-9_]/', '', $seccion);
 $usuario_id = $_SESSION['usuario_id'] ?? '';
 
 // Redirigir a la página de inicio de sesión si no ha iniciado sesión y trata de acceder a una sección restringida
-$public_sections = ['seccion5', 'seccion2', 'seccion17']; // Agregar aquí las secciones públicas
+$public_sections = ['seccion5', 'seccion2', 'seccion17', 'seccion20']; // Agregar aquí las secciones públicas
 if (empty($usuario_id) && !in_array($seccion, $public_sections)) {
     session_regenerate_id(true); // Regenerar ID de sesión para seguridad adicional
     header("Location: controlador.php?seccion=seccion2");
@@ -124,6 +124,10 @@ if (empty($usuario_id) && !in_array($seccion, $public_sections)) {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script>
+
+
     <script src="../js/load_prueba.js"></script>
     <script src="../js/load_usuario.js"></script>
     <script src="../js/load_certificado.js"></script>

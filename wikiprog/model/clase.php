@@ -127,7 +127,7 @@ class Login
         $salida = "";
 
         // Consulta SQL para seleccionar todos los cursos de la tabla 'curso'
-        $sql = "SELECT curso_id, titulo_curso, descripcion, categoria_id, interaciocurso, usuario_id, bloqueo, fecha_registro FROM curso";
+        $sql = "SELECT curso_id, titulo_curso, descripcion, categoria_id, usuario_id, bloqueo, fecha_registro FROM curso";
 
         // Ejecución de la consulta
         $consulta = $conn->query($sql);
@@ -146,7 +146,6 @@ class Login
         $salida .= '<th scope="col">Titulo</th>';
         $salida .= '<th scope="col">Descripcion</th>';
         $salida .= '<th scope="col">Categoria</th>';
-        $salida .= '<th scope="col">Interaciones</th>';
         $salida .= '<th scope="col">Usuario</th>';
         $salida .= '<th scope="col">Bloqueo</th>';
         $salida .= '<th scope="col">Fecha Registro</th>';
@@ -178,7 +177,6 @@ class Login
             $salida .= '<td>' . htmlspecialchars($fila['titulo_curso'], ENT_QUOTES, 'UTF-8') . '</td>';
             $salida .= '<td>' . htmlspecialchars($fila['descripcion'], ENT_QUOTES, 'UTF-8') . '</td>';
             $salida .= '<td>' . $categoria_texto . '</td>';
-            $salida .= '<td>' . htmlspecialchars($fila['interaciocurso'], ENT_QUOTES, 'UTF-8') . '</td>';
             $salida .= '<td>' . htmlspecialchars($fila['usuario_id'], ENT_QUOTES, 'UTF-8') . '</td>';
             $salida .= '<td>' . $bloqueo_texto . '</td>';
             $salida .= '<td>' . htmlspecialchars($fila['fecha_registro'], ENT_QUOTES, 'UTF-8') . '</td>';
@@ -297,7 +295,7 @@ class Login
         $salida = "";
 
         // Consulta SQL para seleccionar todos los cursos de la tabla 'curso' creados por el usuario autenticado
-        $sql = "SELECT curso_id, titulo_curso, descripcion, categoria_id, interaciocurso, usuario_id, bloqueo, fecha_registro 
+        $sql = "SELECT curso_id, titulo_curso, descripcion, categoria_id, usuario_id, bloqueo, fecha_registro 
                 FROM curso 
                 WHERE usuario_id = ?";
 
@@ -321,7 +319,6 @@ class Login
             $salida .= '<th scope="col">Titulo</th>';
             $salida .= '<th scope="col">Descripcion</th>';
             $salida .= '<th scope="col">Categoria</th>';
-            $salida .= '<th scope="col">Interaciones</th>';
             $salida .= '<th scope="col">Usuario</th>';
             $salida .= '<th scope="col">Bloqueo</th>';
             $salida .= '<th scope="col">Fecha Registro</th>';
@@ -353,7 +350,6 @@ class Login
                 $salida .= '<td>' . htmlspecialchars($fila['titulo_curso'], ENT_QUOTES, 'UTF-8') . '</td>';
                 $salida .= '<td>' . htmlspecialchars($fila['descripcion'], ENT_QUOTES, 'UTF-8') . '</td>';
                 $salida .= '<td>' . $categoria_texto . '</td>';
-                $salida .= '<td>' . htmlspecialchars($fila['interaciocurso'], ENT_QUOTES, 'UTF-8') . '</td>';
                 $salida .= '<td>' . htmlspecialchars($fila['usuario_id'], ENT_QUOTES, 'UTF-8') . '</td>';
                 $salida .= '<td>' . $bloqueo_texto . '</td>';
                 $salida .= '<td>' . htmlspecialchars($fila['fecha_registro'], ENT_QUOTES, 'UTF-8') . '</td>';
@@ -375,6 +371,12 @@ class Login
         // Retornar la salida
         return $salida;
     }
+    /**
+     * Recupera y muestra los datos de los usuarios inscritos en un curso específico.
+     *
+     * @param int $curso_id El identificador del curso para el cual se recuperan los usuarios inscritos.
+     * @return string Una cadena de texto con una tabla HTML que contiene los datos de los usuarios inscritos en el curso.
+     */
     public static function verUsuariosInscritos($curso_id)
     {
         // Incluir la configuración de la base de datos
@@ -384,7 +386,7 @@ class Login
         $salida = "";
     
         // Consulta SQL para seleccionar los usuarios inscritos en el curso
-        $sql = "SELECT i.usuario_id, i.nombre, i.correo, i.fecha_registro
+        $sql = "SELECT i.usuario_id, i.nombre, i.correo, i.fecha_registro, i.inscripción_id
                 FROM inscripción i
                 WHERE i.curso_id = ?";
     
@@ -415,12 +417,13 @@ class Login
     
             while ($fila = $result->fetch_assoc()) {
                 $usuario_id = $fila['usuario_id']; // Obtener el id del usuario
+                $inscripción_id = $fila['inscripción_id']; // Obtener el id de inscripción
     
                 $salida .= '<tr>';
                 $salida .= '<td>' . htmlspecialchars($fila['nombre'], ENT_QUOTES, 'UTF-8') . '</td>';
                 $salida .= '<td>' . htmlspecialchars($fila['correo'], ENT_QUOTES, 'UTF-8') . '</td>';
                 $salida .= '<td>' . htmlspecialchars($fila['fecha_registro'], ENT_QUOTES, 'UTF-8') . '</td>';
-                $salida .= '<td><a href="../controller/controlador.php?seccion=seccion19&usuario_id=' . $usuario_id . '&curso_id=' . $curso_id . '" class="btn btn-primary btn-sm">Calificar</a></td>';
+                $salida .= '<td><a href="../controller/controlador.php?seccion=seccion19&usuario_id=' . urlencode($usuario_id) . '&curso_id=' . urlencode($curso_id) . '&inscripción_id=' . urlencode($inscripción_id) . '" class="btn btn-primary btn-sm">Calificar</a></td>';
                 $salida .= '</tr>';
             }
     
@@ -441,42 +444,73 @@ class Login
         // Retornar la salida
         return $salida;
     }
-    public static function getInscripcionInfo($usuario_id, $curso_id) {
+    
+    /**
+     * Recupera la información de inscripción de un usuario en un curso específico.
+     *
+     * @param int $usuario_id El identificador del usuario.
+     * @param int $curso_id El identificador del curso.
+     * @return array|null Un arreglo asociativo con la información de inscripción si se encuentra, o null si no se encuentra.
+     */
+    public static function getInscripcionInfo($usuario_id, $curso_id, $inscripción_id)
+    {
         include 'db_config.php'; // Asegúrate de que esta ruta es correcta
-        
+    
         // Preparar la consulta SQL
-        $sql = "SELECT i.inscripción_id, i.nombre, i.correo, i.curso_id, i.nota, c.titulo_curso
+        $sql = "SELECT i.inscripción_id, i.nombre, i.correo, i.nota, c.titulo_curso,
+                       r.archivo_respuesta, r.fec_reg AS fecha_respuesta
                 FROM inscripción i
                 INNER JOIN curso c ON i.curso_id = c.curso_id
-                WHERE i.usuario_id = ? AND i.curso_id = ?";
-        
+                LEFT JOIN respuesta r ON i.inscripción_id = r.inscripción_id
+                WHERE i.usuario_id = ? AND i.curso_id = ?
+                ORDER BY r.fec_reg DESC
+                LIMIT 1";
+    
         if ($stmt = $conn->prepare($sql)) {
             // Vincular parámetros
             $stmt->bind_param("ii", $usuario_id, $curso_id);
-            
+    
             // Ejecutar la consulta
             $stmt->execute();
-            
+    
             // Obtener el resultado
             $result = $stmt->get_result();
-            
+    
             // Comprobar si se encontró un registro
             if ($result->num_rows > 0) {
                 // Devolver la información del usuario como un arreglo asociativo
-                return $result->fetch_assoc();
+                $data = $result->fetch_assoc();
             } else {
                 // No se encontraron datos
-                return null;
+                $data = null;
             }
+    
+            // Cerrar declaración y resultado
+            $stmt->close();
+            $result->free();
         } else {
             // Error al preparar la consulta
-            return null;
+            $data = null;
         }
+    
+        // Cerrar la conexión
+        $conn->close();
+    
+        return $data;
     }
-
-    public static function actualizarNota($usuario_id, $curso_id, $nueva_nota) {
+    
+    /**
+     * Actualiza la nota de un usuario en un curso específico.
+     *
+     * @param int $usuario_id El identificador del usuario.
+     * @param int $curso_id El identificador del curso.
+     * @param int $nueva_nota La nueva nota a asignar.
+     * @return string Mensaje indicando el resultado de la operación.
+     */
+    public static function actualizarNota($usuario_id, $curso_id, $nueva_nota)
+    {
         include 'db_config.php'; // Asegúrate de que esta ruta es correcta y el archivo está correctamente configurado
-        
+
         // Asegúrate de que la nueva nota es un número entero válido
         if (!is_numeric($nueva_nota) || $nueva_nota < 0 || $nueva_nota > 100) {
             return "Nota inválida. Debe ser un número entre 0 y 100.";
@@ -484,11 +518,11 @@ class Login
 
         // Preparar la consulta SQL para actualizar la nota
         $sql = "UPDATE inscripción SET nota = ? WHERE usuario_id = ? AND curso_id = ?";
-        
+
         if ($stmt = $conn->prepare($sql)) {
             // Vincular parámetros (i: entero)
             $stmt->bind_param("iii", $nueva_nota, $usuario_id, $curso_id);
-            
+
             // Ejecutar la consulta
             if ($stmt->execute()) {
                 return "La nota se ha actualizado correctamente.";

@@ -1,5 +1,3 @@
-// funciones.js
-
 document.addEventListener('DOMContentLoaded', function () {
     cargarCursos(); // Cargar cursos al cargar la página
 
@@ -54,33 +52,81 @@ function renderCursos(data) {
     cursosContainer.innerHTML = ''; // Limpiar el contenedor antes de agregar nuevos cursos
 
     data.forEach(curso => {
-        // Crear un contenedor temporal para usar el innerHTML
         const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = cursoTemplate;
+        tempDiv.innerHTML = cursoTemplate.replace(/{curso_id}/g, curso.curso_id);
 
         const cursoDiv = tempDiv.firstElementChild;
 
-        // Reemplazar contenido dinámico del curso
         cursoDiv.querySelector('.titulo-curso').textContent = curso.titulo_curso;
         cursoDiv.querySelector('.descripcion-curso').textContent = curso.descripcion;
-        cursoDiv.querySelector('.numerodelike').textContent = curso.likes; // Mostrar los likes iniciales
-        cursoDiv.querySelector('.numerodedislike').textContent = curso.dislikes; // Mostrar los dislikes iniciales
-        cursoDiv.querySelector('.like-button').onclick = () => likeCurso(cursoDiv, curso.curso_id);
-        cursoDiv.querySelector('.dislike-button').onclick = () => dislikeCurso(cursoDiv, curso.curso_id);
         cursoDiv.querySelector('.ver-lecciones-link').href = `../controller/controlador.php?seccion=seccion7&curso_id=${curso.curso_id}`;
+
+        // Obtener likes y dislikes
+        obtenerInteracciones(curso.curso_id, cursoDiv);
 
         cursosContainer.appendChild(cursoDiv);
     });
 }
 
-function likeCurso(cursoDiv, cursoId) {
-    // Implementar la lógica para "likear" un curso
+function obtenerInteracciones(cursoId, cursoDiv) {
+    fetch(`../model/get_interacion.php?curso_id=${cursoId}`)
+        .then(response => response.json())
+        .then(data => {
+            cursoDiv.querySelector('.like-count').textContent = `Likes: ${data.like}`;
+            cursoDiv.querySelector('.dislike-count').textContent = `Dislikes: ${data.dislike}`;
+        })
+        .catch(error => console.error('Error fetching interactions:', error));
 }
 
-function dislikeCurso(cursoDiv, cursoId) {
-    // Implementar la lógica para "dislikear" un curso
+function likeCurso(cursoId) {
+    const usuarioId = 1; // Reemplaza con el ID del usuario actual
+    fetch('../model/guardar_interacion.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+            curso_id: cursoId,
+            usuario_id: usuarioId,
+            tipo_interaccion: 'like'
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            const cursoDiv = document.querySelector(`.curso[data-curso-id="${cursoId}"]`);
+            obtenerInteracciones(cursoId, cursoDiv); // Obtener el conteo actualizado
+        } else {
+            console.error('Error:', data.message);
+        }
+    })
+    .catch(error => console.error('Error liking course:', error));
 }
 
+function dislikeCurso(cursoId) {
+    const usuarioId = 1; // Reemplaza con el ID del usuario actual
+    fetch('../model/guardar_interacion.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+            curso_id: cursoId,
+            usuario_id: usuarioId,
+            tipo_interaccion: 'dislike'
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            const cursoDiv = document.querySelector(`.curso[data-curso-id="${cursoId}"]`);
+            obtenerInteracciones(cursoId, cursoDiv); // Obtener el conteo actualizado
+        } else {
+            console.error('Error:', data.message);
+        }
+    })
+    .catch(error => console.error('Error disliking course:', error));
+}
 
 function cargarLecciones(cursoId) {
     fetch(`../model/get_lessons.php?curso_id=${cursoId}`)
@@ -145,4 +191,8 @@ function agregarLeccion() {
     leccionesDiv.appendChild(tempDiv.firstChild);
 }
 
-
+function eliminarLeccion(button) {
+    // Eliminar la lección correspondiente
+    const leccionesDiv = document.getElementById('lecciones');
+    leccionesDiv.removeChild(button.closest('.col-md-12'));
+}

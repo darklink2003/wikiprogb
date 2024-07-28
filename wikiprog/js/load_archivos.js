@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         const col4Div = document.createElement('div');
                         col4Div.classList.add('col-md-2');
                         const privacidad = document.createElement('p');
-                        privacidad.innerHTML = `<strong>Privacidad:</strong> ${archivo.privacidad_id == 1 ? 'Pública' : 'Privada'}`;
+                        privacidad.innerHTML = `<strong>Privacidad:</strong> ${archivo.privacidad_id == 1 ? 'Privada' : 'Pública'}`;
                         col4Div.appendChild(privacidad);
 
                         // Columna 5: Acciones (Descargar y Eliminar)

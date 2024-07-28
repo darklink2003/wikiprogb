@@ -1,7 +1,7 @@
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', () => {
     // Obtener parámetros de la URL
     const urlParams = new URLSearchParams(window.location.search);
-    const cursoId = urlParams.get('curso_id') || 1; // Si no se especifica curso_id, se utiliza 1 por defecto
+    const cursoId = parseInt(urlParams.get('curso_id')) || 1; // Si no se especifica curso_id, se utiliza 1 por defecto
 
     // Cargar comentarios del curso al cargar la página
     cargarComentarios(cursoId);
@@ -10,15 +10,21 @@ document.addEventListener('DOMContentLoaded', function () {
      * Función para cargar los comentarios de un curso desde el servidor.
      * @param {number} cursoId - ID del curso para cargar los comentarios asociados.
      */
-    function cargarComentarios(cursoId) {
-        // Realizar solicitud GET usando Axios
-        axios.get(`../model/get_comments.php?curso_id=${cursoId}`)
-            .then(function (response) {
-                const comentariosContainer = document.getElementById('comentario-container');
-                comentariosContainer.innerHTML = ''; // Limpiar contenido anterior
+    async function cargarComentarios(cursoId) {
+        try {
+            console.log('Cargando comentarios para cursoId:', cursoId); // Verificar la llamada de carga de comentarios
 
+            // Realizar solicitud GET usando Axios
+            const response = await axios.get(`../model/get_comments.php?curso_id=${cursoId}`);
+            console.log('Datos recibidos:', response.data); // Verificar los datos recibidos
+            
+            const comentariosContainer = document.getElementById('comentario-container');
+            comentariosContainer.innerHTML = ''; // Limpiar contenido anterior
+
+            // Verificar si hay datos en response.data
+            if (Array.isArray(response.data)) {
                 // Iterar sobre los comentarios recibidos
-                response.data.forEach(function (comentario) {
+                response.data.forEach(comentario => {
                     // Crear elementos HTML para cada comentario
                     const comentarioDiv = document.createElement('div');
                     comentarioDiv.className = 'col-lg-12 col-md-12 col-sm-12 mb-12'; // Ajusta las columnas según tus necesidades
@@ -47,8 +53,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     const likeButton = document.createElement('button');
                     likeButton.textContent = 'Like';
                     likeButton.className = 'like-button';
-                    likeButton.addEventListener('click', function () {
-                        manejarInteraccion(comentario.comentario_id, 'like', function () {
+                    likeButton.addEventListener('click', () => {
+                        manejarInteraccion(comentario.comentario_id, 'like', () => {
                             comentario.count_likes++;
                             likes.textContent = `Likes: ${comentario.count_likes}`;
                         });
@@ -58,8 +64,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     const dislikeButton = document.createElement('button');
                     dislikeButton.textContent = 'Dislike';
                     dislikeButton.className = 'dislike-button';
-                    dislikeButton.addEventListener('click', function () {
-                        manejarInteraccion(comentario.comentario_id, 'dislike', function () {
+                    dislikeButton.addEventListener('click', () => {
+                        manejarInteraccion(comentario.comentario_id, 'dislike', () => {
                             comentario.count_dislikes++;
                             dislikes.textContent = `Dislikes: ${comentario.count_dislikes}`;
                         });
@@ -78,10 +84,15 @@ document.addEventListener('DOMContentLoaded', function () {
                     comentarioDiv.appendChild(comentarioContainer);
                     comentariosContainer.appendChild(comentarioDiv);
                 });
-            })
-            .catch(function (error) {
-                console.error('Error al cargar los comentarios:', error);
-            });
+            } else {
+                console.log('La respuesta no contiene un array válido de comentarios.');
+            }
+        } catch (error) {
+            console.error('Error al cargar los comentarios:', error);
+            // Mostrar mensaje de error en la UI
+            const comentariosContainer = document.getElementById('comentario-container');
+            comentariosContainer.innerHTML = '<p>Error al cargar los comentarios. Inténtalo de nuevo más tarde.</p>';
+        }
     }
 
     /**
@@ -90,20 +101,33 @@ document.addEventListener('DOMContentLoaded', function () {
      * @param {string} accion - Acción a realizar ('like' o 'dislike').
      * @param {Function} callback - Función a ejecutar después de procesar la interacción.
      */
-    function manejarInteraccion(comentarioId, accion, callback) {
-        // Realizar solicitud POST usando Axios
-        axios.post('../model/manejar_like_dislike.php', {
-            usuario_id: 1, // Ajusta esto según tu lógica para obtener el usuario_id
-            comentario_id: comentarioId,
-            accion: accion
-        })
-        .then(function (response) {
+    async function manejarInteraccion(comentarioId, accion, callback) {
+        try {
+            // Deshabilitar botones mientras se procesa la solicitud
+            const likeButton = document.querySelector(`button[data-comentario-id="${comentarioId}"].like-button`);
+            const dislikeButton = document.querySelector(`button[data-comentario-id="${comentarioId}"].dislike-button`);
+            likeButton.disabled = true;
+            dislikeButton.disabled = true;
+
+            // Realizar solicitud POST usando Axios
+            await axios.post('../model/manejar_like_dislike.php', {
+                usuario_id: 1, // Ajusta esto según tu lógica para obtener el usuario_id
+                comentario_id: comentarioId,
+                accion: accion
+            });
+
             // Ejecutar el callback proporcionado para actualizar el frontend
             callback();
             console.log(`Interacción de ${accion} registrada correctamente.`);
-        })
-        .catch(function (error) {
+        } catch (error) {
             console.error(`Error al procesar ${accion}:`, error);
-        });
+            // Opcional: mostrar mensaje de error en la UI
+        } finally {
+            // Habilitar botones después de procesar la solicitud
+            const likeButton = document.querySelector(`button[data-comentario-id="${comentarioId}"].like-button`);
+            const dislikeButton = document.querySelector(`button[data-comentario-id="${comentarioId}"].dislike-button`);
+            likeButton.disabled = false;
+            dislikeButton.disabled = false;
+        }
     }
 });

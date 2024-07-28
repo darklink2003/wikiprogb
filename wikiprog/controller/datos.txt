@@ -1,0 +1,12 @@
+Server
+smtp.mailersend.net
+
+Username
+MS_7TqdMh@trial-z3m5jgr0dk0gdpyo.mlsender.net
+
+Port
+Connection security: TLS
+587
+
+Password
+hEr0zjsAdFm0ZgYz

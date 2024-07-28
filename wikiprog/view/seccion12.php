@@ -55,7 +55,6 @@ if (isset($_GET['usuario_id'])) {
                             <label for="privacidad" class="form-label text-white">Privacidad</label>
                             <select class="form-select" id="privacidad" name="privacidad">
                                 <option value="1">Pública</option>
-                                <option value="2">Privada</option>
                             </select>
                         </div>
                         <button type="submit" class="btn btn-primary">Subir Archivo</button>
