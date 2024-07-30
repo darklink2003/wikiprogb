@@ -4,10 +4,9 @@
  * clase.php
  * Esta clase permite registrar nuevos usuarios y recuperar datos de usuarios existentes.
  * 
- * @version 1.0
+ * @version 1.1
  * @author Pablo Alexander Mondragon Acevedo
  */
-
 class Login
 {
     /**
@@ -21,19 +20,26 @@ class Login
      */
     public static function registrar($usuario, $correo, $contraseña, $rango_id)
     {
-        // Incluir la configuración de la base de datos
         include 'db_config.php';
 
-        // Consulta SQL para insertar un nuevo usuario en la tabla 'usuario'
-        $sql = "INSERT INTO usuario (usuario, correo, contraseña, rango_id) VALUES ('$usuario', '$correo', '$contraseña', '$rango_id')";
+        $sql = "INSERT INTO usuario (usuario, correo, contraseña, rango_id) VALUES (?, ?, ?, ?)";
+        if ($stmt = $conn->prepare($sql)) {
+            $stmt->bind_param("sssi", $usuario, $correo, $contraseña, $rango_id);
+            $stmt->execute();
 
-        // Ejecución de la consulta
-        $consulta = $conn->query($sql);
+            if ($stmt->affected_rows > 0) {
+                header("Location: ../controller/controlador.php?seccion=seccion6");
+                exit;
+            } else {
+                echo "Error al registrar el usuario: " . $stmt->error;
+            }
 
-        // Redirección si la consulta se ejecuta correctamente
-        if ($consulta) {
-            header("Location: ../controller/controlador.php?seccion=seccion6");
+            $stmt->close();
+        } else {
+            echo "Error al preparar la consulta: " . $conn->error;
         }
+
+        $conn->close();
     }
 
     /**
@@ -43,73 +49,68 @@ class Login
      */
     public static function verusuarios()
     {
-        // Incluir la configuración de la base de datos
         include 'db_config.php';
+        include_once '../controller/class_fechas.php';
 
-        // Variable para almacenar la salida
         $salida = "";
 
-        // Consulta SQL para seleccionar todos los usuarios de la tabla 'usuario'
         $sql = "SELECT usuario_id, usuario, img_usuario, correo, biografia, rango_id, fecha_registro, intentos_fallidos, cuenta_bloqueada FROM usuario";
 
-        // Ejecución de la consulta
-        $consulta = $conn->query($sql);
+        if ($consulta = $conn->query($sql)) {
+            $conn->set_charset("utf8mb4");
 
-
-        // Construcción de la tabla HTML con los datos de los usuarios
-        $salida = '<div class="container-fluid" style="max-width:110%;">';
-        $salida .= '<div class="table-responsive">';
-        $salida .= '<table class="table table-striped table-hover table-bordered">';
-        $salida .= '<thead class="table-dark">';
-        $salida .= '<tr>';
-        $salida .= '<th scope="col">Usuario</th>';
-        $salida .= '<th scope="col">Correo</th>';
-        $salida .= '<th scope="col">Biografía</th>';
-        $salida .= '<th scope="col">Rango</th>';
-        $salida .= '<th scope="col">Fecha de Registro</th>';
-        $salida .= '<th scope="col">Intentos Fallidos</th>';
-        $salida .= '<th scope="col">Cuenta Bloqueada</th>';
-        $salida .= '<th scope="col">Editar</th>';
-        $salida .= '<th scope="col">Eliminar</th>';
-        $salida .= '</tr>';
-        $salida .= '</thead>';
-        $salida .= '<tbody>';
-
-        while ($fila = $consulta->fetch_assoc()) {
-            $usuario_id = $fila['usuario_id']; // Obtener el id del usuario
-
-            // Asignar texto correspondiente al rango_id
-            $rango_texto = isset($fila["rango_id"]) ?
-                ($fila["rango_id"] == 1 ? "Usuario" :
-                    ($fila["rango_id"] == 2 ? "Administrador" :
-                        ($fila["rango_id"] == 3 ? "Evaluador" : "Desconocido")))
-                : "Desconocido";
-
-            // Convertir el valor de cuenta_bloqueada a texto
-            $cuenta_bloqueada_texto = $fila['cuenta_bloqueada'] ? "Sí" : "No";
-
+            $salida = '<div class="container-fluid" style="max-width:110%;">';
+            $salida .= '<div class="table-responsive">';
+            $salida .= '<table class="table table-striped table-hover table-bordered">';
+            $salida .= '<thead class="table-dark">';
             $salida .= '<tr>';
-            $salida .= '<td>' . htmlspecialchars($fila['usuario'], ENT_QUOTES, 'UTF-8') . '</td>';
-            $salida .= '<td>' . htmlspecialchars($fila['correo'], ENT_QUOTES, 'UTF-8') . '</td>';
-            $salida .= '<td>' . htmlspecialchars($fila['biografia'], ENT_QUOTES, 'UTF-8') . '</td>';
-            $salida .= '<td>' . $rango_texto . '</td>';
-            $salida .= '<td>' . htmlspecialchars($fila['fecha_registro'], ENT_QUOTES, 'UTF-8') . '</td>';
-            $salida .= '<td>' . htmlspecialchars($fila['intentos_fallidos'], ENT_QUOTES, 'UTF-8') . '</td>';
-            $salida .= '<td>' . $cuenta_bloqueada_texto . '</td>';
-            $salida .= '<td><a href="../controller/controlador.php?seccion=seccion13&id=' . $usuario_id . '" class="btn btn-primary btn-sm">Editar</a></td>';
-            $salida .= '<td><a href="../model/eliminar.php?id=' . $usuario_id . '" class="btn btn-danger btn-sm">Eliminar</a></td>';
+            $salida .= '<th scope="col">Usuario</th>';
+            $salida .= '<th scope="col">Correo</th>';
+            $salida .= '<th scope="col">Biografía</th>';
+            $salida .= '<th scope="col">Rango</th>';
+            $salida .= '<th scope="col">Fecha de Registro</th>';
+            $salida .= '<th scope="col">Intentos Fallidos</th>';
+            $salida .= '<th scope="col">Cuenta Bloqueada</th>';
+            $salida .= '<th scope="col">Editar</th>';
+            $salida .= '<th scope="col">Eliminar</th>';
             $salida .= '</tr>';
+            $salida .= '</thead>';
+            $salida .= '<tbody>';
+
+            while ($fila = $consulta->fetch_assoc()) {
+                $usuario_id = $fila['usuario_id'];
+                $rango_texto = [
+                    1 => "Usuario",
+                    2 => "Administrador",
+                    3 => "Evaluador"
+                ][$fila["rango_id"]] ?? "Desconocido";
+
+                $cuenta_bloqueada_texto = $fila['cuenta_bloqueada'] ? "Sí" : "No";
+                $fecha_registro = !empty($fila['fecha_registro']) ? Fecha::mostrarFechas($fila['fecha_registro']) : 'Fecha no disponible';
+
+                $salida .= '<tr>';
+                $salida .= '<td>' . htmlspecialchars($fila['usuario'], ENT_QUOTES, 'UTF-8') . '</td>';
+                $salida .= '<td>' . htmlspecialchars($fila['correo'], ENT_QUOTES, 'UTF-8') . '</td>';
+                $salida .= '<td>' . htmlspecialchars($fila['biografia'], ENT_QUOTES, 'UTF-8') . '</td>';
+                $salida .= '<td>' . $rango_texto . '</td>';
+                $salida .= '<td>' . htmlspecialchars($fecha_registro, ENT_QUOTES, 'UTF-8') . '</td>';
+                $salida .= '<td>' . htmlspecialchars($fila['intentos_fallidos'], ENT_QUOTES, 'UTF-8') . '</td>';
+                $salida .= '<td>' . $cuenta_bloqueada_texto . '</td>';
+                $salida .= '<td><a href="../controller/controlador.php?seccion=seccion13&id=' . $usuario_id . '" class="btn btn-primary btn-sm">Editar</a></td>';
+                $salida .= '<td><a href="../model/eliminar.php?id=' . $usuario_id . '" class="btn btn-danger btn-sm">Eliminar</a></td>';
+                $salida .= '</tr>';
+            }
+
+            $salida .= '</tbody>';
+            $salida .= '</table>';
+            $salida .= '</div>';
+            $salida .= '</div>';
+        } else {
+            echo "Error al ejecutar la consulta: " . $conn->error;
         }
 
-        $salida .= '</tbody>';
-        $salida .= '</table>';
-        $salida .= '</div>'; // Cerrar el div table-responsive
-        $salida .= '</div>'; // Cerrar el div container-fluid
-
-        // Cerrar la conexión
         $conn->close();
 
-        // Retornar la salida
         return $salida;
     }
 
@@ -120,79 +121,81 @@ class Login
      */
     public static function vercursos()
     {
-        // Incluir la configuración de la base de datos
         include 'db_config.php';
+        include_once '../controller/class_fechas.php';
 
-        // Variable para almacenar la salida
+  
+
+        if (!isset($_SESSION['usuario_id'])) {
+            die("Usuario no autenticado.");
+        }
+
+        $usuario_id = $_SESSION['usuario_id'];
+
         $salida = "";
 
-        // Consulta SQL para seleccionar todos los cursos de la tabla 'curso'
         $sql = "SELECT curso_id, titulo_curso, descripcion, categoria_id, usuario_id, bloqueo, fecha_registro FROM curso";
 
-        // Ejecución de la consulta
-        $consulta = $conn->query($sql);
-
-        // Verificar si la consulta fue exitosa
-        if (!$consulta) {
-            die("Error en la consulta: " . $conn->query($sql));
-        }
-
-        // Construcción de la tabla HTML con los datos de los cursos
-        $salida = '<div class="container-fluid" style="max-width:400vh;">';
-        $salida .= '<div class="table-responsive">';
-        $salida .= '<table class="table table-striped table-hover table-bordered">';
-        $salida .= '<thead class="table-dark">';
-        $salida .= '<tr>';
-        $salida .= '<th scope="col">Titulo</th>';
-        $salida .= '<th scope="col">Descripcion</th>';
-        $salida .= '<th scope="col">Categoria</th>';
-        $salida .= '<th scope="col">Usuario</th>';
-        $salida .= '<th scope="col">Bloqueo</th>';
-        $salida .= '<th scope="col">Fecha Registro</th>';
-        $salida .= '<th scope="col">Editar</th>';
-        $salida .= '</tr>';
-        $salida .= '</thead>';
-        $salida .= '<tbody>';
-
-        while ($fila = $consulta->fetch_assoc()) {
-            $curso_id = $fila['curso_id']; // Obtener el id del curso
-
-            // Asignar texto correspondiente al categoria_id
-            $categoria_texto = isset($fila["categoria_id"]) ?
-                ($fila["categoria_id"] == 1 ? "Código" :
-                    ($fila["categoria_id"] == 2 ? "Lógica del programador" :
-                        ($fila["categoria_id"] == 3 ? "Estilo" :
-                            ($fila["categoria_id"] == 4 ? "Base de datos" :
-                                ($fila["categoria_id"] == 5 ? "Otro" :
-                                    ($fila["categoria_id"] == 6 ? "AJAX" : "Desconocido"))))))
-                : "Desconocido";
-
-            // Convertir el valor de bloqueo a texto
-            $bloqueo_texto = isset($fila["bloqueo"]) ?
-                ($fila["bloqueo"] == 1 ? "Bloqueada" :
-                    ($fila["bloqueo"] == 0 ? "En línea" : "Desconocido"))
-                : "Desconocido";
-
+        if ($consulta = $conn->query($sql)) {
+            $salida = '<div class="container-fluid" style="max-width:400vh;">';
+            $salida .= '<div class="table-responsive">';
+            $salida .= '<table class="table table-striped table-hover table-bordered">';
+            $salida .= '<thead class="table-dark">';
             $salida .= '<tr>';
-            $salida .= '<td>' . htmlspecialchars($fila['titulo_curso'], ENT_QUOTES, 'UTF-8') . '</td>';
-            $salida .= '<td>' . htmlspecialchars($fila['descripcion'], ENT_QUOTES, 'UTF-8') . '</td>';
-            $salida .= '<td>' . $categoria_texto . '</td>';
-            $salida .= '<td>' . htmlspecialchars($fila['usuario_id'], ENT_QUOTES, 'UTF-8') . '</td>';
-            $salida .= '<td>' . $bloqueo_texto . '</td>';
-            $salida .= '<td>' . htmlspecialchars($fila['fecha_registro'], ENT_QUOTES, 'UTF-8') . '</td>';
-            $salida .= '<td><a href="../controller/controlador.php?seccion=seccion14&id=' . $curso_id . '" class="btn btn-primary btn-sm">Editar</a></td>';
+            $salida .= '<th scope="col">Titulo</th>';
+            $salida .= '<th scope="col">Descripcion</th>';
+            $salida .= '<th scope="col">Categoria</th>';
+            $salida .= '<th scope="col">Usuario</th>';
+            $salida .= '<th scope="col">Bloqueo</th>';
+            $salida .= '<th scope="col">Fecha Registro</th>';
+            $salida .= '<th scope="col">Acciones</th>';
             $salida .= '</tr>';
+            $salida .= '</thead>';
+            $salida .= '<tbody>';
+
+            while ($fila = $consulta->fetch_assoc()) {
+                $curso_id = $fila['curso_id'];
+                $categoria_texto = [
+                    1 => "Código",
+                    2 => "Lógica del programador",
+                    3 => "Estilo",
+                    4 => "Base de datos",
+                    5 => "Otro",
+                    6 => "AJAX"
+                ][$fila['categoria_id']] ?? "Desconocido";
+
+                $bloqueo_texto = [
+                    1 => "Bloqueada",
+                    0 => "En línea"
+                ][$fila['bloqueo']] ?? "Desconocido";
+
+                $fecha_registro = !empty($fila['fecha_registro']) ? Fecha::mostrarFechas($fila['fecha_registro']) : 'Fecha no disponible';
+
+                $salida .= '<tr>';
+                $salida .= '<td>' . htmlspecialchars($fila['titulo_curso'], ENT_QUOTES, 'UTF-8') . '</td>';
+                $salida .= '<td>' . htmlspecialchars($fila['descripcion'], ENT_QUOTES, 'UTF-8') . '</td>';
+                $salida .= '<td>' . $categoria_texto . '</td>';
+                $salida .= '<td>' . htmlspecialchars($fila['usuario_id'], ENT_QUOTES, 'UTF-8') . '</td>';
+                $salida .= '<td>' . $bloqueo_texto . '</td>';
+                $salida .= '<td>' . htmlspecialchars($fecha_registro, ENT_QUOTES, 'UTF-8') . '</td>';
+                $salida .= '<td>';
+                $salida .= '<a href="../controller/controlador.php?seccion=seccion14&id=' . $curso_id . '" class="btn btn-primary btn-sm">Editar</a> ';
+                $salida .= '<a href="../model/acciones.php?accion=like&id=' . $curso_id . '" class="btn btn-success btn-sm">Me gusta</a> ';
+                $salida .= '<a href="../model/acciones.php?accion=dislike&id=' . $curso_id . '" class="btn btn-danger btn-sm">No Me gusta</a> ';
+                $salida .= '</td>';
+                $salida .= '</tr>';
+            }
+
+            $salida .= '</tbody>';
+            $salida .= '</table>';
+            $salida .= '</div>';
+            $salida .= '</div>';
+        } else {
+            echo "Error al ejecutar la consulta: " . $conn->error;
         }
 
-        $salida .= '</tbody>';
-        $salida .= '</table>';
-        $salida .= '</div>'; // Cerrar el div table-responsive
-        $salida .= '</div>'; // Cerrar el div container-fluid
-
-        // Cerrar la conexión
         $conn->close();
 
-        // Retornar la salida
         return $salida;
     }
     /**
@@ -209,6 +212,7 @@ class Login
     {
         // Incluir la configuración de la base de datos
         include 'db_config.php';
+        include_once '../controller/class_fechas.php';
 
         // Variable para almacenar la salida
         $salida = "";
@@ -256,6 +260,10 @@ class Login
             $nota = htmlspecialchars($fila['nota'], ENT_QUOTES, 'UTF-8');
             $fecha_registro = htmlspecialchars($fila['fecha_registro'], ENT_QUOTES, 'UTF-8');
 
+            // Verificar que fecha_registro no es vacío y es una fecha válida
+            $fecha_registro = !empty($fila['fecha_registro']) ? Fecha::mostrarFechas($fila['fecha_registro']) : 'Fecha no disponible';
+
+
             $salida .= '<tr>';
             $salida .= '<td>' . $inscripción_id . '</td>';
             $salida .= '<td>' . $curso_id . '</td>';
@@ -266,7 +274,7 @@ class Login
             $salida .= '<td>' . $pais . '</td>';
             $salida .= '<td>' . $cursos_anteriores . '</td>';
             $salida .= '<td>' . $nota . '</td>';
-            $salida .= '<td>' . $fecha_registro . '</td>';
+            $salida .= '<td>' . htmlspecialchars($fecha_registro, ENT_QUOTES, 'UTF-8') . '</td>';
             $salida .= '</tr>';
         }
 
@@ -290,6 +298,7 @@ class Login
     {
         // Incluir la configuración de la base de datos
         include 'db_config.php';
+        include_once '../controller/class_fechas.php';
 
         // Variable para almacenar la salida
         $salida = "";
@@ -346,13 +355,17 @@ class Login
                         ($fila["bloqueo"] == 0 ? "En línea" : "Desconocido"))
                     : "Desconocido";
 
+                // Verificar que fecha_registro no es vacío y es una fecha válida
+                $fecha_registro = !empty($fila['fecha_registro']) ? Fecha::mostrarFechas($fila['fecha_registro']) : 'Fecha no disponible';
+
+
                 $salida .= '<tr>';
                 $salida .= '<td>' . htmlspecialchars($fila['titulo_curso'], ENT_QUOTES, 'UTF-8') . '</td>';
                 $salida .= '<td>' . htmlspecialchars($fila['descripcion'], ENT_QUOTES, 'UTF-8') . '</td>';
                 $salida .= '<td>' . $categoria_texto . '</td>';
                 $salida .= '<td>' . htmlspecialchars($fila['usuario_id'], ENT_QUOTES, 'UTF-8') . '</td>';
                 $salida .= '<td>' . $bloqueo_texto . '</td>';
-                $salida .= '<td>' . htmlspecialchars($fila['fecha_registro'], ENT_QUOTES, 'UTF-8') . '</td>';
+                $salida .= '<td>' . htmlspecialchars($fecha_registro, ENT_QUOTES, 'UTF-8') . '</td>';
                 $salida .= '<td><a href="../controller/controlador.php?seccion=seccion18&curso_id=' . $curso_id . '" class="btn btn-primary btn-sm">Alumnos</a></td>';
                 $salida .= '</tr>';
             }
@@ -381,26 +394,27 @@ class Login
     {
         // Incluir la configuración de la base de datos
         include 'db_config.php';
-    
+        include_once '../controller/class_fechas.php';
+
         // Variable para almacenar la salida
         $salida = "";
-    
+
         // Consulta SQL para seleccionar los usuarios inscritos en el curso
         $sql = "SELECT i.usuario_id, i.nombre, i.correo, i.fecha_registro, i.inscripción_id
                 FROM inscripción i
                 WHERE i.curso_id = ?";
-    
+
         // Preparación de la consulta
         if ($stmt = $conn->prepare($sql)) {
             // Vincular el parámetro
             $stmt->bind_param("i", $curso_id);
-    
+
             // Ejecutar la consulta
             $stmt->execute();
-    
+
             // Obtener el resultado
             $result = $stmt->get_result();
-    
+
             // Construcción de la tabla HTML con los datos de los usuarios
             $salida = '<div class="container-fluid" style="max-width:400vh;">';
             $salida .= '<div class="table-responsive">';
@@ -414,37 +428,41 @@ class Login
             $salida .= '</tr>';
             $salida .= '</thead>';
             $salida .= '<tbody>';
-    
+
             while ($fila = $result->fetch_assoc()) {
                 $usuario_id = $fila['usuario_id']; // Obtener el id del usuario
                 $inscripción_id = $fila['inscripción_id']; // Obtener el id de inscripción
-    
+
+
+                // Verificar que fecha_registro no es vacío y es una fecha válida
+                $fecha_registro = !empty($fila['fecha_registro']) ? Fecha::mostrarFechas($fila['fecha_registro']) : 'Fecha no disponible';
+
+
                 $salida .= '<tr>';
                 $salida .= '<td>' . htmlspecialchars($fila['nombre'], ENT_QUOTES, 'UTF-8') . '</td>';
                 $salida .= '<td>' . htmlspecialchars($fila['correo'], ENT_QUOTES, 'UTF-8') . '</td>';
-                $salida .= '<td>' . htmlspecialchars($fila['fecha_registro'], ENT_QUOTES, 'UTF-8') . '</td>';
+                $salida .= '<td>' . htmlspecialchars($fecha_registro, ENT_QUOTES, 'UTF-8') . '</td>';
                 $salida .= '<td><a href="../controller/controlador.php?seccion=seccion19&usuario_id=' . urlencode($usuario_id) . '&curso_id=' . urlencode($curso_id) . '&inscripción_id=' . urlencode($inscripción_id) . '" class="btn btn-primary btn-sm">Calificar</a></td>';
                 $salida .= '</tr>';
             }
-    
+
             $salida .= '</tbody>';
             $salida .= '</table>';
             $salida .= '</div>'; // Cerrar el div table-responsive
             $salida .= '</div>'; // Cerrar el div container-fluid
-    
+
             // Cerrar la declaración preparada
             $stmt->close();
         } else {
             $salida = "<p>Error al preparar la consulta.</p>";
         }
-    
+
         // Cerrar la conexión
         $conn->close();
-    
+
         // Retornar la salida
         return $salida;
     }
-    
     /**
      * Recupera la información de inscripción de un usuario en un curso específico.
      *
@@ -455,7 +473,7 @@ class Login
     public static function getInscripcionInfo($usuario_id, $curso_id, $inscripción_id)
     {
         include 'db_config.php'; // Asegúrate de que esta ruta es correcta
-    
+
         // Preparar la consulta SQL
         $sql = "SELECT i.inscripción_id, i.nombre, i.correo, i.nota, c.titulo_curso,
                        r.archivo_respuesta, r.fec_reg AS fecha_respuesta
@@ -465,17 +483,17 @@ class Login
                 WHERE i.usuario_id = ? AND i.curso_id = ?
                 ORDER BY r.fec_reg DESC
                 LIMIT 1";
-    
+
         if ($stmt = $conn->prepare($sql)) {
             // Vincular parámetros
             $stmt->bind_param("ii", $usuario_id, $curso_id);
-    
+
             // Ejecutar la consulta
             $stmt->execute();
-    
+
             // Obtener el resultado
             $result = $stmt->get_result();
-    
+
             // Comprobar si se encontró un registro
             if ($result->num_rows > 0) {
                 // Devolver la información del usuario como un arreglo asociativo
@@ -484,7 +502,7 @@ class Login
                 // No se encontraron datos
                 $data = null;
             }
-    
+
             // Cerrar declaración y resultado
             $stmt->close();
             $result->free();
@@ -492,13 +510,12 @@ class Login
             // Error al preparar la consulta
             $data = null;
         }
-    
+
         // Cerrar la conexión
         $conn->close();
-    
+
         return $data;
     }
-    
     /**
      * Actualiza la nota de un usuario en un curso específico.
      *

@@ -8,6 +8,9 @@
 // Incluir el archivo de configuración de la base de datos
 include 'db_config.php';
 
+// Incluir el archivo de la clase Fecha
+include '../controller/class_fechas.php';
+
 // Verificar la conexión
 if ($conn->connect_error) {
     http_response_code(500);
@@ -36,13 +39,16 @@ if (isset($_GET['curso_id']) && is_numeric($_GET['curso_id'])) {
 
             // Iterar sobre las pruebas
             while ($row = $result->fetch_assoc()) {
+                // Formatear la fecha de registro usando la clase Fecha
+                $fecha_formateada = Fecha::mostrarFechas($row['fec_reg']);
+                
                 $pruebas[] = array(
                     'prueba_id' => $row['prueba_id'],
                     'curso_id' => $row['curso_id'],
                     'titulo_prueba' => $row['titulo_prueba'],
                     'contenido' => $row['contenido'],
                     'archivo_prueba' => $row['archivo_prueba'],
-                    'fec_reg' => $row['fec_reg'],
+                    'fec_reg' => $fecha_formateada, // Usar la fecha formateada
                 );
             }
 

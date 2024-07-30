@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['archivo_respuesta']) 
                 if ($stmt->execute()) {
                     // Redireccionar y asegurarse de que $usuario_id esté definido
                     $usuario_id = isset($_SESSION['usuario_id']) ? $_SESSION['usuario_id'] : 'default_id'; // Ajustar según tu lógica
-                    header("Location: controlador.php?seccion=seccion3&usuario_id=" . htmlspecialchars($usuario_id));
+                    header("Location: ../controller/controlador.php?seccion=seccion1");
                     exit();
                 } else {
                     error_log("Error al guardar la respuesta en la base de datos: " . $stmt->error);

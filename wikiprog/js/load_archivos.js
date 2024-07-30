@@ -2,7 +2,10 @@
 document.addEventListener('DOMContentLoaded', function () {
     const urlParams = new URLSearchParams(window.location.search);
     const usuario_id = urlParams.get('usuario_id');
-
+    /**
+     * Carga y muestra los archivos asociados con un usuario.
+     * @param {string} usuario_id - El ID del usuario cuyos archivos se deben cargar.
+     */
     function cargarArchivos(usuario_id) {
         if (!usuario_id) {
             console.error('No se proporcionó un usuario_id válido.');
@@ -70,7 +73,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         enlaceEliminar.textContent = 'Eliminar';
                         enlaceEliminar.href = `javascript:void(0);`;  // Enlace sin acción por defecto, puedes ajustar esto según tu lógica
                         enlaceEliminar.classList.add('btn', 'btn-danger', 'btn-sm', 'ms-1');
-                        enlaceEliminar.addEventListener('click', function() {
+                        enlaceEliminar.addEventListener('click', function () {
                             eliminarArchivo(archivo.archivo_id);  // Llama a la función eliminarArchivo con el ID del archivo
                         });
                         col5Div.appendChild(enlaceEliminar);
@@ -110,12 +113,12 @@ document.addEventListener('DOMContentLoaded', function () {
     function eliminarArchivo(archivoId) {
         if (confirm('¿Estás seguro de que deseas eliminar este archivo?')) {
             axios.delete(`../model/delte_archivo.php?archivo_id=${archivoId}`)
-                .then(function(response) {
+                .then(function (response) {
                     console.log(response.data);
                     // Recargar la lista de archivos después de eliminar
                     cargarArchivos(usuario_id);
                 })
-                .catch(function(error) {
+                .catch(function (error) {
                     console.error('Error al eliminar el archivo:', error);
                     alert('Hubo un error al eliminar el archivo. Intenta nuevamente más tarde.');
                 });

@@ -7,7 +7,8 @@
 
 // Incluir el archivo de configuración de la base de datos
 include 'db_config.php';
-
+// Incluir el archivo de la clase Fecha
+include '../controller/class_fechas.php';
 // Verificar la conexión
 if ($conn->connect_error) {
     die("Error de conexión: " . $conn->connect_error);
@@ -35,12 +36,14 @@ if (isset($_GET['usuario_id'])) {
         while ($row = $result->fetch_assoc()) {
             // Construir la ruta completa al archivo (considerando el nombre de la carpeta)
             $ruta_archivo = 'archivos_usuarios/' . $row['archivo'];
+            // Formatear la fecha de registro usando la clase Fecha
+            $fecha_formateada = Fecha::mostrarFechas($row['fecha_registro']);
 
             $archivos[] = array(
                 'archivo_id' => $row['archivo_id'],
                 'nombre_archivo' => $row['nombre_archivo'],
                 'tamaño' => $row['tamaño'],
-                'fecha_registro' => $row['fecha_registro'],
+                'fecha_registro' => $fecha_formateada,
                 'privacidad' => $row['tipo_privacidad'],
                 'enlace_descarga' => $ruta_archivo // Ruta completa al archivo
             );

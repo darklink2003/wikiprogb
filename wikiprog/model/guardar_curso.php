@@ -27,7 +27,7 @@ function obtenerUsuarioId()
         return $_SESSION['usuario_id'];
     } else {
         // Redirigir al usuario a la página de inicio de sesión si no hay sesión activa
-        header("Location: login.php");
+        header("Location: index.php");
         exit(); // Finalizar la ejecución del script después de redirigir
     }
 }
@@ -121,12 +121,13 @@ $conn->begin_transaction();
 
 try {
     // Insertar los datos en la tabla curso
-    $sql_curso = "INSERT INTO curso (titulo_curso, descripcion, categoria_id, interaciocurso, usuario_id, bloqueo, fecha_registro) VALUES (?, ?, ?, ?, ?, ?, NOW())";
+    $sql_curso = "INSERT INTO curso (titulo_curso, descripcion, categoria_id, usuario_id, bloqueo, fecha_registro) VALUES (?, ?, ?, ?, ?, NOW())";
+
     $stmt_curso = $conn->prepare($sql_curso);
     if (!$stmt_curso) {
         throw new Exception("Error en la preparación de la consulta de curso: " . $conn->error);
     }
-    $stmt_curso->bind_param("ssiisi", $titulo_curso, $descripcion, $categoria_id, $interaciocurso, $usuario_id, $bloqueo);
+    $stmt_curso->bind_param("ssiii", $titulo_curso, $descripcion, $categoria_id, $usuario_id, $bloqueo);
     $stmt_curso->execute();
     if ($stmt_curso->errno) {
         throw new Exception("Error en la ejecución de la consulta de curso: " . $stmt_curso->error);

@@ -9,7 +9,8 @@
 
 // Incluir el archivo de configuración de la base de datos
 include 'db_config.php';
-
+// Incluir la clase Fecha para calcular el tiempo transcurrido
+include '../controller/class_fechas.php';
 // Verificar la conexión
 if ($conn->connect_error) {
     die("Error de conexión: " . $conn->connect_error);
@@ -35,7 +36,18 @@ if ($stmt) {
 
     $comentarios = array();
     while ($comentario = $resultado->fetch_assoc()) {
-        $comentarios[] = $comentario;
+        // Calcular el tiempo transcurrido usando la clase Fecha
+        $tiempo_transcurrido = Fecha::mostrarFechas($comentario['fecha_registro']);
+
+        $comentarios[] = array(
+            'comentario_id' => $comentario['comentario_id'],
+            'usuario_id' => $comentario['usuario_id'],
+            'curso_id' => $comentario['curso_id'],
+            'comentario' => $comentario['comentario'],
+            'fecha_registro' => $comentario['fecha_registro'],
+            'tiempo_transcurrido' => $tiempo_transcurrido, // Tiempo transcurrido
+            'nombre_usuario' => $comentario['nombre_usuario']
+        );
     }
 
     // Establecer encabezado para indicar que se devolverá JSON

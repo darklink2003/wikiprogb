@@ -78,7 +78,7 @@
                         
                         <!-- Contenedor para mostrar los términos y condiciones -->
                         <div class="mb-3" id="terminosIframeContainer" style="display: none;">
-                            <iframe src="../view/terminos_y_condiciones.html" width="100%" height="200" frameborder="0"></iframe>
+                            <iframe src="../view/terminos_y_condiciones.php" width="100%" height="200" frameborder="0"></iframe>
                         </div>
                         
                         <!-- Botón para enviar el formulario -->

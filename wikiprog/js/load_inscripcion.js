@@ -28,43 +28,42 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Columna 1: Nombre del curso
             const col1Div = document.createElement('div');
-            col1Div.classList.add('col-md-2', 'col-sm-6'); // Ajuste de tamaño para diferentes dispositivos
+            col1Div.classList.add('col-md-2', 'col-sm-6');
             const nombreCurso = document.createElement('p');
             nombreCurso.innerHTML = `<strong>Curso:</strong> ${inscripcion.titulo_curso}`;
             col1Div.appendChild(nombreCurso);
 
             // Columna 2: Nota
             const col2Div = document.createElement('div');
-            col2Div.classList.add('col-md-2', 'col-sm-6'); // Ajuste de tamaño para diferentes dispositivos
+            col2Div.classList.add('col-md-2', 'col-sm-6');
             const nota = document.createElement('p');
             nota.innerHTML = `<strong>Nota:</strong> ${inscripcion.nota}`;
             col2Div.appendChild(nota);
 
-            // Columna 3: Fecha de registro
+            // Columna 3: Tiempo Transcurrido
             const col3Div = document.createElement('div');
             col3Div.classList.add('col-md-4');
-            const fechaRegistro = document.createElement('p');
-            fechaRegistro.innerHTML = `<strong>Fecha de Registro:</strong> ${inscripcion.fecha_registro}`;
-            col3Div.appendChild(fechaRegistro);
+            const tiempoTranscurrido = document.createElement('p');
+            tiempoTranscurrido.innerHTML = `<strong>Tiempo Transcurrido:</strong> ${inscripcion.tiempo_transcurrido}`;
+            col3Div.appendChild(tiempoTranscurrido);
 
             // Columna 4: Acciones
             const col4Div = document.createElement('div');
-            col4Div.classList.add('col-md-4', 'col-sm-12', 'text-end'); // Ajuste de tamaño para diferentes dispositivos
+            col4Div.classList.add('col-md-4', 'col-sm-12', 'text-end');
 
-            // Enlace para ir al curso
+            // Enlaces de acción
             const enlaceCurso = document.createElement('a');
             enlaceCurso.textContent = 'Ir al curso';
             enlaceCurso.href = `../controller/controlador.php?seccion=seccion7&curso_id=${inscripcion.curso_id}`;
             enlaceCurso.classList.add('btn', 'btn-info', 'btn-sm', 'ms-1');
             col4Div.appendChild(enlaceCurso);
 
-            // Enlace para ir al prueba
             const enlacePrueba = document.createElement('a');
             enlacePrueba.textContent = 'Ir a la prueba';
-            enlacePrueba.href = `../controller/controlador.php?seccion=seccion16&curso_id=${inscripcion.curso_id}&inscripción_id=${inscripcion.inscripción_id}`;
+            enlacePrueba.href = `../controller/controlador.php?seccion=seccion16&curso_id=${inscripcion.curso_id}&inscripción_id=${inscripcion.inscripción_id}&usuario_id=${usuario_id}`;
             enlacePrueba.classList.add('btn', 'btn-danger', 'btn-sm', 'ms-1');
             col4Div.appendChild(enlacePrueba);
-            // Enlace para Abrir el certificado
+
             const enlaceCertificado = document.createElement('a');
             enlaceCertificado.textContent = 'Abrir Certificado';
             enlaceCertificado.href = `../controller/controlador.php?seccion=seccion15&usuario_id=${usuario_id}`;

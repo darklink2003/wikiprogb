@@ -8,6 +8,9 @@
 // Incluir el archivo de configuración de la base de datos
 include 'db_config.php';
 
+// Incluir la clase Fecha para calcular el tiempo transcurrido
+include '../controller/class_fechas.php';
+
 // Verificar la conexión
 if ($conn->connect_error) {
     die(json_encode(array('error' => "Error de conexión: " . $conn->connect_error)));
@@ -36,6 +39,9 @@ if (isset($_GET['usuario_id']) && is_numeric($_GET['usuario_id'])) {
 
             // Iterar sobre las inscripciones
             while ($row = $result->fetch_assoc()) {
+                // Calcular el tiempo transcurrido usando la clase Fecha
+                $tiempo_transcurrido = Fecha::mostrarFechas($row['fecha_registro']);
+
                 $inscripciones[] = array(
                     'inscripción_id' => $row['inscripción_id'],
                     'curso_id' => $row['curso_id'],
@@ -46,6 +52,7 @@ if (isset($_GET['usuario_id']) && is_numeric($_GET['usuario_id'])) {
                     'cursos_anteriores' => $row['cursos_anteriores'],
                     'nota' => $row['nota'],
                     'fecha_registro' => $row['fecha_registro'],
+                    'tiempo_transcurrido' => $tiempo_transcurrido, // Tiempo transcurrido
                     'titulo_curso' => $row['titulo_curso']
                 );
             }

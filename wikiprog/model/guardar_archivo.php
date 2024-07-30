@@ -23,7 +23,7 @@
             return $_SESSION['usuario_id'];
         } else {
             // Redirigir al usuario a la página de inicio de sesión si no hay sesión activa
-            header("Location: login.php");
+            header("Location: index.php");
             exit(); // Finalizar la ejecución del script después de redirigir
         }
     }

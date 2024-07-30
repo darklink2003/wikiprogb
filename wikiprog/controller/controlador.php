@@ -20,40 +20,25 @@ $seccion = "seccion2";
 
 // Verificar si se ha proporcionado una sección válida a través de GET
 if (isset($_GET['seccion'])) {
-    // Obtener la sección desde el GET
-    $seccion = $_GET['seccion'];
-
-    // Validar que la sección exista para evitar vulnerabilidades de inclusión de archivos
+    $seccion = htmlspecialchars($_GET['seccion']); // Escapado para prevenir XSS
     $secciones_disponibles = [
-        'seccion1',
-        'seccion2',
-        'seccion3',
-        'seccion4',
-        'seccion5',
-        'seccion6',
-        'seccion7',
-        'seccion8',
-        'seccion9',
-        'seccion10',
-        'seccion11',
-        'seccion12',
-        'seccion13',
-        'seccion14',
-        'seccion15',
-        'seccion16',
-        'seccion17',
-        'seccion18',
-        'seccion19',
-        'seccion20'
+        'seccion1', 'seccion2', 'seccion3', 'seccion4', 'seccion5', 'seccion6', 'seccion7',
+        'seccion8', 'seccion9', 'seccion10', 'seccion11', 'seccion12', 'seccion13', 'seccion14',
+        'seccion15', 'seccion16', 'seccion17', 'seccion18', 'seccion19', 'seccion20'
     ];
 
-    // Verificar si la sección solicitada está en el arreglo de secciones disponibles
     if (!in_array($seccion, $secciones_disponibles)) {
-        // Si la sección no es válida, redirigir o manejar el error según la lógica de la aplicación
+        // Manejar error o redirigir a una página de error
         $seccion = 'seccion2'; // Cargar sección por defecto
     }
 }
 
 // Incluir la plantilla para la interfaz
-include ($vistas_path . "plantilla.php");
+$plantilla_path = $vistas_path . "plantilla.php";
+if (file_exists($plantilla_path)) {
+    include $plantilla_path;
+} else {
+    // Manejar el error si la plantilla no se encuentra
+    echo "Error: La plantilla no se encuentra.";
+}
 ?>

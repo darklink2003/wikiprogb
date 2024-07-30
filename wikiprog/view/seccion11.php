@@ -10,7 +10,7 @@ if (!isset($_SESSION['usuario_id'])) {
     exit();
 }
 ?>
-<div class="contenedor_ayuda-12" style="background-color:#232230; color:white; width: 100%;">
+<div class="contenedor_ayuda-12" style="background-color:#232230; color:white; width: 100%; padding:15px; border-radius:15px;">
     <div class="row">
         <div class="col-md-12 d-flex align-items-center">
             <h1>AYUDA</h1>

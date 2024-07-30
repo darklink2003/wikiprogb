@@ -1,3 +1,8 @@
+/**
+ * funciiones.js
+ * Evento que se dispara cuando el DOM se ha cargado por completo.
+ * Carga los cursos iniciales y configura el manejador de eventos para la búsqueda de cursos.
+ */
 document.addEventListener('DOMContentLoaded', function () {
     cargarCursos(); // Cargar cursos al cargar la página
 
@@ -20,6 +25,9 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
+/**
+ * Carga los cursos iniciales y los renderiza en la página.
+ */
 function cargarCursos() {
     mostrarIndicadorCarga(true);
     fetch('../model/get_courses.php')
@@ -34,17 +42,30 @@ function cargarCursos() {
         });
 }
 
+/**
+ * Muestra u oculta un indicador de carga.
+ * @param {boolean} mostrar - Si es verdadero, muestra el indicador; de lo contrario, lo oculta.
+ */
 function mostrarIndicadorCarga(mostrar) {
     const indicadorCarga = document.getElementById('indicador-carga');
     indicadorCarga.style.display = mostrar ? 'block' : 'none';
 }
 
+/**
+ * Muestra un mensaje de error en la página.
+ * @param {string} mensaje - El mensaje de error a mostrar.
+ * @param {Error} error - El objeto de error que se produjo.
+ */
 function mostrarMensajeError(mensaje, error) {
     const errorContainer = document.getElementById('error-container');
     errorContainer.textContent = mensaje;
     console.error(error);
 }
 
+/**
+ * Renderiza una lista de cursos en la página.
+ * @param {Array} data - Una lista de objetos de cursos.
+ */
 function renderCursos(data) {
     const cursosContainer = document.getElementById('cursos-container');
     const cursoTemplate = document.getElementById('curso-template').innerHTML;
@@ -68,6 +89,11 @@ function renderCursos(data) {
     });
 }
 
+/**
+ * Obtiene y muestra las interacciones (likes y dislikes) de un curso.
+ * @param {number} cursoId - El ID del curso.
+ * @param {HTMLElement} cursoDiv - El elemento DOM donde se mostrarán las interacciones.
+ */
 function obtenerInteracciones(cursoId, cursoDiv) {
     fetch(`../model/get_interacion.php?curso_id=${cursoId}`)
         .then(response => response.json())
@@ -78,56 +104,11 @@ function obtenerInteracciones(cursoId, cursoDiv) {
         .catch(error => console.error('Error fetching interactions:', error));
 }
 
-function likeCurso(cursoId) {
-    const usuarioId = 1; // Reemplaza con el ID del usuario actual
-    fetch('../model/guardar_interacion.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: new URLSearchParams({
-            curso_id: cursoId,
-            usuario_id: usuarioId,
-            tipo_interaccion: 'like'
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            const cursoDiv = document.querySelector(`.curso[data-curso-id="${cursoId}"]`);
-            obtenerInteracciones(cursoId, cursoDiv); // Obtener el conteo actualizado
-        } else {
-            console.error('Error:', data.message);
-        }
-    })
-    .catch(error => console.error('Error liking course:', error));
-}
 
-function dislikeCurso(cursoId) {
-    const usuarioId = 1; // Reemplaza con el ID del usuario actual
-    fetch('../model/guardar_interacion.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: new URLSearchParams({
-            curso_id: cursoId,
-            usuario_id: usuarioId,
-            tipo_interaccion: 'dislike'
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            const cursoDiv = document.querySelector(`.curso[data-curso-id="${cursoId}"]`);
-            obtenerInteracciones(cursoId, cursoDiv); // Obtener el conteo actualizado
-        } else {
-            console.error('Error:', data.message);
-        }
-    })
-    .catch(error => console.error('Error disliking course:', error));
-}
-
+/**
+ * Carga y muestra las lecciones de un curso específico.
+ * @param {number} cursoId - El ID del curso.
+ */
 function cargarLecciones(cursoId) {
     fetch(`../model/get_lessons.php?curso_id=${cursoId}`)
         .then(response => response.json())
@@ -159,6 +140,9 @@ function cargarLecciones(cursoId) {
         });
 }
 
+/**
+ * Agrega una nueva lección al formulario de lecciones.
+ */
 function agregarLeccion() {
     const leccionesDiv = document.getElementById('lecciones');
 
@@ -191,6 +175,10 @@ function agregarLeccion() {
     leccionesDiv.appendChild(tempDiv.firstChild);
 }
 
+/**
+ * Elimina una lección del formulario de lecciones.
+ * @param {HTMLElement} button - El botón que desencadena la eliminación.
+ */
 function eliminarLeccion(button) {
     // Eliminar la lección correspondiente
     const leccionesDiv = document.getElementById('lecciones');

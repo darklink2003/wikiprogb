@@ -35,7 +35,7 @@ CREATE TABLE `archivo` (
   KEY `privacidad_id` (`privacidad_id`),
   CONSTRAINT `archivo_ibfk_1` FOREIGN KEY (`usuario_id`) REFERENCES `usuario` (`usuario_id`),
   CONSTRAINT `archivo_ibfk_2` FOREIGN KEY (`privacidad_id`) REFERENCES `privacidad` (`privacidad_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -44,6 +44,7 @@ CREATE TABLE `archivo` (
 
 LOCK TABLES `archivo` WRITE;
 /*!40000 ALTER TABLE `archivo` DISABLE KEYS */;
+INSERT INTO `archivo` VALUES (40,34,'certificado (3).pdf','1.46 MB',1,'2024-07-29 00:59:22','0');
 /*!40000 ALTER TABLE `archivo` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -84,13 +85,11 @@ CREATE TABLE `comentario` (
   `usuario_id` int(11) NOT NULL,
   `curso_id` int(11) NOT NULL,
   `comentario` text NOT NULL,
-  `megustac` int(45) DEFAULT 0,
-  `dislike` int(45) DEFAULT 0,
   `fecha_registro` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`comentario_id`),
   KEY `usuario_id` (`usuario_id`),
   CONSTRAINT `comentario_ibfk_1` FOREIGN KEY (`usuario_id`) REFERENCES `usuario` (`usuario_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -99,7 +98,6 @@ CREATE TABLE `comentario` (
 
 LOCK TABLES `comentario` WRITE;
 /*!40000 ALTER TABLE `comentario` DISABLE KEYS */;
-INSERT INTO `comentario` VALUES (1,14,33,'xd',0,0,'2024-06-27 12:52:43'),(2,14,26,'hola',0,0,'2024-06-27 15:46:55'),(3,21,32,'5151',0,0,'2024-07-04 21:52:10'),(4,21,1,'asdsd',0,0,'2024-07-04 22:03:17'),(5,21,1,'asdsd',0,0,'2024-07-04 22:05:54'),(6,21,1,'ghghgh',0,0,'2024-07-04 22:12:12'),(7,21,1,'asdsadqwewewe',0,0,'2024-07-04 22:13:04'),(8,21,27,'asdsadfxzcxc',0,0,'2024-07-04 22:18:08'),(9,21,36,'56161',0,0,'2024-07-05 02:17:50'),(10,21,27,'123123132',0,0,'2024-07-05 02:46:15'),(11,21,27,'gfsd',0,0,'2024-07-05 16:15:14'),(12,21,27,'hola',0,0,'2024-07-05 16:41:02'),(13,21,29,'xd',0,0,'2024-07-07 23:18:50'),(14,21,39,'si funciona el metodo',0,0,'2024-07-08 21:06:07'),(15,21,39,'a',0,0,'2024-07-09 13:58:00');
 /*!40000 ALTER TABLE `comentario` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -115,16 +113,15 @@ CREATE TABLE `curso` (
   `titulo_curso` varchar(30) DEFAULT NULL,
   `descripcion` varchar(45) DEFAULT NULL,
   `categoria_id` int(11) NOT NULL,
-  `fecha_registro` timestamp NOT NULL DEFAULT current_timestamp(),
-  `megusta` int(11) NOT NULL DEFAULT 0,
-  `dislike` int(11) NOT NULL DEFAULT 0,
   `usuario_id` int(11) NOT NULL,
+  `bloqueo` int(11) NOT NULL DEFAULT 0,
+  `fecha_registro` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`curso_id`),
   KEY `categoria_id` (`categoria_id`),
   KEY `curso_ibfk_usuario` (`usuario_id`),
   CONSTRAINT `curso_ibfk_1` FOREIGN KEY (`categoria_id`) REFERENCES `categoria` (`categoria_id`),
   CONSTRAINT `curso_ibfk_usuario` FOREIGN KEY (`usuario_id`) REFERENCES `usuario` (`usuario_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=72 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -133,7 +130,7 @@ CREATE TABLE `curso` (
 
 LOCK TABLES `curso` WRITE;
 /*!40000 ALTER TABLE `curso` DISABLE KEYS */;
-INSERT INTO `curso` VALUES (39,'php','programar',1,'2024-07-08 21:05:18',0,0,21);
+INSERT INTO `curso` VALUES (71,'español','videos',1,34,0,'2024-07-29 11:50:37');
 /*!40000 ALTER TABLE `curso` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -146,17 +143,21 @@ DROP TABLE IF EXISTS `inscripción`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `inscripción` (
   `inscripción_id` int(11) NOT NULL AUTO_INCREMENT,
-  `curso_id` int(11) NOT NULL,
+  `curso_id` int(11) DEFAULT 0,
   `usuario_id` int(11) NOT NULL,
   `nombre` varchar(50) NOT NULL,
+  `correo` varchar(100) NOT NULL,
+  `genero` varchar(20) NOT NULL,
+  `pais` varchar(50) NOT NULL,
+  `cursos_anteriores` enum('si','no') NOT NULL,
   `nota` int(45) NOT NULL,
   `fecha_registro` datetime NOT NULL,
   PRIMARY KEY (`inscripción_id`),
   KEY `curso_id` (`curso_id`),
   KEY `usuario_id` (`usuario_id`),
-  CONSTRAINT `inscripción_ibfk_1` FOREIGN KEY (`curso_id`) REFERENCES `curso` (`curso_id`),
+  CONSTRAINT `inscripción_ibfk_1` FOREIGN KEY (`curso_id`) REFERENCES `curso` (`curso_id`) ON DELETE SET NULL,
   CONSTRAINT `inscripción_ibfk_2` FOREIGN KEY (`usuario_id`) REFERENCES `usuario` (`usuario_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -165,7 +166,38 @@ CREATE TABLE `inscripción` (
 
 LOCK TABLES `inscripción` WRITE;
 /*!40000 ALTER TABLE `inscripción` DISABLE KEYS */;
+INSERT INTO `inscripción` VALUES (8,71,34,'pablo','pablomondragonacevedo@gmail.com','masculino','colombia','si',75,'2024-07-29 06:51:32');
 /*!40000 ALTER TABLE `inscripción` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `interaccioncurso`
+--
+
+DROP TABLE IF EXISTS `interaccioncurso`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `interaccioncurso` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `curso_id` int(11) NOT NULL,
+  `usuario_id` int(11) NOT NULL,
+  `tipo_interaccion` enum('like','dislike') NOT NULL,
+  `fecha` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_interaction` (`curso_id`,`usuario_id`,`tipo_interaccion`),
+  KEY `usuario_id` (`usuario_id`),
+  CONSTRAINT `interaccioncurso_ibfk_1` FOREIGN KEY (`curso_id`) REFERENCES `curso` (`curso_id`) ON DELETE CASCADE,
+  CONSTRAINT `interaccioncurso_ibfk_2` FOREIGN KEY (`usuario_id`) REFERENCES `usuario` (`usuario_id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=107 DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `interaccioncurso`
+--
+
+LOCK TABLES `interaccioncurso` WRITE;
+/*!40000 ALTER TABLE `interaccioncurso` DISABLE KEYS */;
+/*!40000 ALTER TABLE `interaccioncurso` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -185,7 +217,7 @@ CREATE TABLE `leccion` (
   PRIMARY KEY (`leccion_id`),
   KEY `curso_id` (`curso_id`),
   CONSTRAINT `leccion_ibfk_1` FOREIGN KEY (`curso_id`) REFERENCES `curso` (`curso_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=72 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -194,35 +226,8 @@ CREATE TABLE `leccion` (
 
 LOCK TABLES `leccion` WRITE;
 /*!40000 ALTER TABLE `leccion` DISABLE KEYS */;
-INSERT INTO `leccion` VALUES (41,39,'funciones','muchas funciones','../archivos_leccion/668c548eea645_Detalles_Demograficos.pdf','2024-07-08 21:05:18'),(42,39,'metodos','muy utilices','../archivos_leccion/668c548eec547_detalles_tecnologicos.pdf','2024-07-08 21:05:18');
+INSERT INTO `leccion` VALUES (71,71,'letras','ads','../archivos_leccion/66a7820d6e017_wikiprog.sql','2024-07-29 11:50:37');
 /*!40000 ALTER TABLE `leccion` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `nivel`
---
-
-DROP TABLE IF EXISTS `nivel`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `nivel` (
-  `nivel_id` int(11) NOT NULL AUTO_INCREMENT,
-  `nombre` varchar(45) NOT NULL,
-  `leccion_id` int(11) NOT NULL,
-  `fecha_registro` timestamp NOT NULL DEFAULT current_timestamp(),
-  PRIMARY KEY (`nivel_id`),
-  KEY `leccion_id` (`leccion_id`),
-  CONSTRAINT `nivel_ibfk_1` FOREIGN KEY (`leccion_id`) REFERENCES `leccion` (`leccion_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `nivel`
---
-
-LOCK TABLES `nivel` WRITE;
-/*!40000 ALTER TABLE `nivel` DISABLE KEYS */;
-/*!40000 ALTER TABLE `nivel` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -237,7 +242,7 @@ CREATE TABLE `privacidad` (
   `tipo` varchar(45) NOT NULL,
   `fecha_registro` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`privacidad_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -246,7 +251,41 @@ CREATE TABLE `privacidad` (
 
 LOCK TABLES `privacidad` WRITE;
 /*!40000 ALTER TABLE `privacidad` DISABLE KEYS */;
+INSERT INTO `privacidad` VALUES (1,'publica','2024-07-10 15:31:03'),(2,'privada','2024-07-10 15:31:03');
 /*!40000 ALTER TABLE `privacidad` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `prueba`
+--
+
+DROP TABLE IF EXISTS `prueba`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `prueba` (
+  `prueba_id` int(11) NOT NULL AUTO_INCREMENT,
+  `curso_id` int(11) DEFAULT NULL,
+  `titulo_prueba` varchar(45) NOT NULL,
+  `contenido` varchar(45) DEFAULT NULL,
+  `archivo_prueba` varchar(100) DEFAULT NULL,
+  `usuario_id` int(11) DEFAULT NULL,
+  `fec_reg` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`prueba_id`),
+  KEY `fk_prueba_usuario` (`usuario_id`),
+  KEY `fk_prueba_curso` (`curso_id`),
+  CONSTRAINT `fk_prueba_curso` FOREIGN KEY (`curso_id`) REFERENCES `curso` (`curso_id`),
+  CONSTRAINT `fk_prueba_usuario` FOREIGN KEY (`usuario_id`) REFERENCES `usuario` (`usuario_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `prueba`
+--
+
+LOCK TABLES `prueba` WRITE;
+/*!40000 ALTER TABLE `prueba` DISABLE KEYS */;
+INSERT INTO `prueba` VALUES (18,71,'que es ','das','../archivos_prueba/66a7820d6e655_ejercicio adso2.jpg',NULL,'2024-07-29 11:50:37');
+/*!40000 ALTER TABLE `prueba` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -275,32 +314,33 @@ INSERT INTO `rango` VALUES (1,'usuario','2024-06-04 12:05:53'),(2,'administrador
 UNLOCK TABLES;
 
 --
--- Table structure for table `registrar`
+-- Table structure for table `respuesta`
 --
 
-DROP TABLE IF EXISTS `registrar`;
+DROP TABLE IF EXISTS `respuesta`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `registrar` (
-  `registrar_id` int(11) NOT NULL AUTO_INCREMENT,
-  `usuario_id` int(11) NOT NULL,
-  `correo` varchar(100) NOT NULL,
-  `contraseña` varchar(255) NOT NULL,
-  `terminos_y_condiciones` tinyint(1) NOT NULL,
-  `fecha_registro` timestamp NOT NULL DEFAULT current_timestamp(),
-  PRIMARY KEY (`registrar_id`),
-  KEY `usuario_id` (`usuario_id`),
-  CONSTRAINT `registrar_ibfk_1` FOREIGN KEY (`usuario_id`) REFERENCES `usuario` (`usuario_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE `respuesta` (
+  `respuesta_id` int(11) NOT NULL AUTO_INCREMENT,
+  `prueba_id` int(11) DEFAULT NULL,
+  `archivo_respuesta` varchar(150) NOT NULL,
+  `inscripción_id` int(11) NOT NULL,
+  `fec_reg` datetime NOT NULL,
+  PRIMARY KEY (`respuesta_id`),
+  KEY `fk_respuesta_prueba` (`prueba_id`),
+  KEY `fk_respuesta_inscripcion` (`inscripción_id`),
+  CONSTRAINT `fk_respuesta_inscripcion` FOREIGN KEY (`inscripción_id`) REFERENCES `inscripción` (`inscripción_id`),
+  CONSTRAINT `fk_respuesta_prueba` FOREIGN KEY (`prueba_id`) REFERENCES `prueba` (`prueba_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `registrar`
+-- Dumping data for table `respuesta`
 --
 
-LOCK TABLES `registrar` WRITE;
-/*!40000 ALTER TABLE `registrar` DISABLE KEYS */;
-/*!40000 ALTER TABLE `registrar` ENABLE KEYS */;
+LOCK TABLES `respuesta` WRITE;
+/*!40000 ALTER TABLE `respuesta` DISABLE KEYS */;
+/*!40000 ALTER TABLE `respuesta` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -324,7 +364,7 @@ CREATE TABLE `usuario` (
   PRIMARY KEY (`usuario_id`),
   KEY `rango_id` (`rango_id`),
   CONSTRAINT `usuario_ibfk_1` FOREIGN KEY (`rango_id`) REFERENCES `rango` (`rango_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -333,7 +373,7 @@ CREATE TABLE `usuario` (
 
 LOCK TABLES `usuario` WRITE;
 /*!40000 ALTER TABLE `usuario` DISABLE KEYS */;
-INSERT INTO `usuario` VALUES (14,'marzo','','marzo@gmail.com','marzo','marzo2000',1,'2024-06-04 21:20:05',0,0),(16,'mike','Maicol_Sanchez.jpg','mike@gmail.com','soy un programador','mike2003',1,'2024-06-11 16:39:27',0,0),(21,'pablo','arnol2.jpg','pablomondragonacevedo@gmail.com','aaaa','123',2,'2024-06-21 11:59:35',0,0),(27,'juan','null','juan@gmail.com','castalleda','456',1,'2024-06-26 19:13:50',0,0),(29,'julian','null','julian@gmail.com','cine','$2y$10$gbp6yhVUU99ssOGcvpUpCePVviyoikG3JrXPZ7',1,'2024-06-28 15:45:50',0,0),(30,'andres','null','andres@gmail.com','andres','andres',1,'2024-06-28 16:17:05',0,0),(31,'dany','null','dany@gmail.com','soy un programador','Dany1#20',1,'2024-07-08 20:16:28',0,0);
+INSERT INTO `usuario` VALUES (34,'pablo','1577104437983.png','pablomondragonacevedo@gmail.com','administrador','123456789',3,'2024-07-17 17:15:14',0,0),(36,'1','2','2','2','2',3,'2024-07-23 20:40:56',0,0),(37,'dark','1580916381444.png','dark@gmail.com','zelda','123',1,'2024-07-26 02:00:25',0,0);
 /*!40000 ALTER TABLE `usuario` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -346,4 +386,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-07-09  9:29:43
+-- Dump completed on 2024-07-29  7:39:26

@@ -84,7 +84,7 @@
 
         var divPrueba = document.createElement("div");
         divPrueba.setAttribute("class", "prueba");
-        divPrueba.setAttribute("style", "margin-top: 10px;");
+        divPrueba.setAttribute("style", "margin-top: 10px; background-color:#292835; padding:20px; border-radius:15px");
 
         var tituloInput = document.createElement("input");
         tituloInput.setAttribute("type", "text");

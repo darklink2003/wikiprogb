@@ -6,6 +6,7 @@ if (isset($_GET['curso_id']) && is_numeric($_GET['curso_id'])) {
     // Manejar el caso donde no se proporciona un curso_id válido
     die("Error: No se ha proporcionado un ID de curso válido.");
 }
+
 ?>
 
 <style>
@@ -46,40 +47,26 @@ if (isset($_GET['curso_id']) && is_numeric($_GET['curso_id'])) {
         }
     }
 
-    .like-button {
-        background-color: #28a745;
-        /* Verde */
-        color: white;
-        border: none;
-        padding: 8px 16px;
-        cursor: pointer;
-        margin-right: 5px;
-        /* Separación de 5px a la derecha */
-    }
 
-    .dislike-button {
-        background-color: #dc3545;
-        /* Rojo */
-        color: white;
-        border: none;
-        padding: 8px 16px;
-        cursor: pointer;
-    }
 </style>
 
 <div class="container">
-    <!-- Contenedor de información del curso -->
-    <div id="info-curso" class="mt-4 bg-dark p-3 text-white rounded">
-        <!-- Aquí se cargará dinámicamente la información del curso y el enlace de inscripción -->
-    </div>
-    <br>
-    <!-- Contenedor de lecciones del curso -->
-    <div id="lecciones-container" class="mt-12 row">
-        <!-- Aquí se cargarán dinámicamente las lecciones del curso -->
+    <div class="container" style="background-color:#3c3d3f; padding:15px; border-radius:15px;">
+        <!-- Contenedor de información del curso -->
+        <div id="info-curso" class="mt-4 bg-dark p-3 text-white rounded">
+            <!-- Aquí se cargará dinámicamente la información del curso y el enlace de inscripción -->
+             
+        </div>
+        <br>
+        <!-- Contenedor de lecciones del curso -->
+        <div id="lecciones-container" class="mt-12 row">
+            <!-- Aquí se cargarán dinámicamente las lecciones del curso -->
+        </div>
     </div>
 
+
     <!-- Formulario para enviar comentarios -->
-    <div id="formulario-comentario-container" class="mt-4 row">
+    <div id="formulario-comentario-container" class="mt-4 row bg-dark p-2" style="border-radius:15px; color:white;">
         <form action="../model/guardar_comentario.php" method="POST">
             <!-- Campo oculto con el ID del curso -->
             <input type="hidden" name="curso_id"
@@ -97,3 +84,4 @@ if (isset($_GET['curso_id']) && is_numeric($_GET['curso_id'])) {
     <div id="comentario-container" class="mt-4 row">
         <!-- Aquí se cargarán dinámicamente los comentarios del curso -->
     </div>
+</div>
