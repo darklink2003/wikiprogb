@@ -15,20 +15,29 @@ $curso_id = intval($_GET['id']);
 $usuario_id = intval($_SESSION['usuario_id']); // Suponiendo que el ID del usuario está en la sesión
 
 // Verificar que la acción es válida
-if ($accion !== 'like' && $accion !== 'dislike') {
+if ($accion !== 'like' && $accion !== 'dislike' && $accion !== 'quitar_like' && $accion !== 'quitar_dislike') {
     die("Acción no válida.");
 }
 
-// Preparar la consulta para insertar o actualizar la interacción
-$sql = "INSERT INTO interaccioncurso (curso_id, usuario_id, tipo_interaccion) 
-        VALUES (?, ?, ?)
-        ON DUPLICATE KEY UPDATE tipo_interaccion = VALUES(tipo_interaccion)";
+// Determinar si es una acción de agregar o quitar interacción
+if ($accion === 'quitar_like' || $accion === 'quitar_dislike') {
+    // Eliminar la interacción
+    $sql = "DELETE FROM interaccioncurso WHERE curso_id = ? AND usuario_id = ? AND tipo_interaccion = ?";
+    $tipo_interaccion = $accion === 'quitar_like' ? 'like' : 'dislike';
+} else {
+    // Insertar o actualizar la interacción
+    $sql = "INSERT INTO interaccioncurso (curso_id, usuario_id, tipo_interaccion) 
+            VALUES (?, ?, ?)
+            ON DUPLICATE KEY UPDATE tipo_interaccion = VALUES(tipo_interaccion)";
+    $tipo_interaccion = $accion;
+}
 
 if ($stmt = $conn->prepare($sql)) {
-    $stmt->bind_param('iis', $curso_id, $usuario_id, $accion);
+    $stmt->bind_param('iis', $curso_id, $usuario_id, $tipo_interaccion);
 
     if ($stmt->execute()) {
-        header('Location: ../controller/controlador.php?seccion=seccion6');
+        header('Location: ../controller/controlador.php?seccion=seccion6'); // Redirigir después de la acción
+        exit();
     } else {
         echo "Error al registrar la interacción: " . $stmt->error;
     }
@@ -40,8 +49,4 @@ if ($stmt = $conn->prepare($sql)) {
 
 // Cerrar la conexión
 $conn->close();
-
-// Opcional: redirigir a una página específica después de registrar la interacción
-// header('Location: ../ruta_a_tu_pagina.php');
-// exit();
 ?>

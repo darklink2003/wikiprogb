@@ -49,8 +49,10 @@ if (empty($usuario_id) && !in_array($seccion, $public_sections)) {
         gtag('js', new Date());
         gtag('config', 'G-GQJG3209SE');
     </script>
-    <?php include '../controller/mensajes.php'; ?> <!-- Incluir el archivo de mensajes -->
+    <?php include '../model/mensajes.php'; ?> <!-- Incluir el archivo de mensajes -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 
 </head>
 
@@ -78,9 +80,7 @@ if (empty($usuario_id) && !in_array($seccion, $public_sections)) {
                     <li class="nav-item">
                         <a class="nav-link" href="controlador.php?seccion=seccion10">Configuración</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="controlador.php?seccion=seccion11">Ayuda</a>
-                    </li>
+
                     <li class="nav-item">
                         <a class="nav-link" href="logout.php">Cerrar Sesión</a>
                     </li>

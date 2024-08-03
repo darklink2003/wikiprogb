@@ -13,7 +13,7 @@
  */
 -->
 <?php
-        include ("../model/clase.php");
+include ("../model/clase.php");
 // Inicia la sesión si no está activa
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
@@ -42,7 +42,7 @@ if (!isset($_SESSION['usuario_id'])) {
     </h1>
     <div class="row">
         <?php
-         echo (login::vercursos());
+        echo (login::vercursos());
         ?>
     </div>
     <h1>
@@ -50,7 +50,8 @@ if (!isset($_SESSION['usuario_id'])) {
     </h1>
     <div class="row">
         <?php
-         echo (login::verinscripciones());
+        echo (login::verinscripciones());
         ?>
     </div>
+    <a href="controlador.php?seccion=seccion11" class="btn btn-primary">Ver estadísticas</a>
 </div>

@@ -2,7 +2,7 @@
 <html>
 <head>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <?php include '../controller/mensajes.php'; ?> <!-- Incluir el archivo de mensajes -->
+    <?php include 'mensajes.php'; ?> <!-- Incluir el archivo de mensajes -->
 </head>
 <body>
     <?php

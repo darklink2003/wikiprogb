@@ -10,7 +10,6 @@
  * 
  * @version 1.0
  * @author Pablo Alexander Mondragon Acevedo
- *         Keiner Yamith Tarache Parra
  */
 -->
 

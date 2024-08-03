@@ -25,9 +25,8 @@
         <p class="descripcion-curso"></p>
         <a class="ver-lecciones-link" href="#">Ver lecciones</a>
         <div class="reacciones">
-            <span class="like-count">Likes: 0</span>
-            <span class="dislike-count">Dislikes: 0</span>
+            <span class="like-count">Aprovado: 0</span>
+            <span class="dislike-count">Desaprovado: 0</span>
         </div>
     </div>
 </script>
-

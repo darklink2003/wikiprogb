@@ -49,7 +49,7 @@ $conn->close();
     <div class="row">
         <div class="col-md-12">
             <div class="py-4 text-center">
-                <h2>Perfil Público</h2>
+                <h2>Perfil</h2>
                 <hr>
             </div>
             <div class="row" style="background-color: #1c1b24; padding:20px; color:white; border-radius:15px;>
@@ -95,3 +95,4 @@ $conn->close();
     </div>
 </div>
 </div>
+

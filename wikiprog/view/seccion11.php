@@ -1,50 +1,107 @@
 <?php
-// Inicia la sesión si no está activa
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
+// Incluir el archivo de configuración de la base de datos
+include ('../model/db_config.php');
+
+// Consulta SQL para obtener inscripciones por curso y mes
+$query = "
+    SELECT c.titulo_curso, DATE_FORMAT(i.fecha_registro, '%Y-%m') as mes, COUNT(i.inscripción_id) as inscriptos 
+    FROM curso c 
+    LEFT JOIN inscripción i ON c.curso_id = i.curso_id 
+    GROUP BY c.curso_id, c.titulo_curso, mes
+    ORDER BY c.titulo_curso, mes
+";
+
+$result = $conn->query($query);
+
+$data = [];
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $data[$row['titulo_curso']][$row['mes']] = $row['inscriptos'];
+    }
+} else {
+    echo "No se encontraron resultados.";
+}
+$conn->close();
+
+// Preparar los datos para Chart.js
+$labels = [];
+$datasets = [];
+$colors = [
+    'rgba(255, 99, 132, 1)',
+    'rgba(75, 99, 132, 1)',
+    'rgba(255, 206, 86, 1)',
+    'rgba(75, 192, 192, 1 )',
+    'rgba(153, 102, 255, 1)',
+    'rgba(255, 159, 64, 1)',
+    'rgba(255, 99, 71, 1)',
+    'rgba(0, 255, 0, 1)',
+    'rgba(0, 191, 255, 1)',
+    'rgba(255, 165, 0, 1)'
+];
+$borderColors = [
+    'rgba(255, 99, 132, 1)',
+    'rgba(54, 162, 235, 1)',
+    'rgba(255, 206, 86, 1)',
+    'rgba(75, 192, 192, 1)',
+    'rgba(153, 102, 255, 1)',
+    'rgba(255, 159, 64, 1)',
+    'rgba(255, 99, 71, 1)',
+    'rgba(0, 255, 0, 1)',
+    'rgba(0, 191, 255, 1)',
+    'rgba(255, 165, 0, 1)'
+];
+
+foreach ($data as $curso => $meses) {
+    $dataset = [
+        'label' => $curso,
+        'data' => [],
+        'backgroundColor' => $colors[count($datasets) % count($colors)],
+        'borderColor' => $borderColors[count($datasets) % count($borderColors)],
+        'borderWidth' => 1
+    ];
+    foreach ($meses as $mes => $inscriptos) {
+        if (!in_array($mes, $labels)) {
+            $labels[] = $mes;
+        }
+        $dataset['data'][] = $inscriptos;
+    }
+    // Completar los meses que faltan en los datos de cada curso
+    while (count($dataset['data']) < count($labels)) {
+        $dataset['data'][] = 0;
+    }
+    $datasets[] = $dataset;
 }
 
-// Verificar si el usuario está autenticado
-if (!isset($_SESSION['usuario_id'])) {
-    header("Location: ../controller/controlador.php?seccion=seccion2&error=not_logged_in");
-    exit();
-}
+// Convertir datos a JSON
+$labels_json = json_encode($labels);
+$datasets_json = json_encode($datasets);
 ?>
-<div class="contenedor_ayuda-12" style="background-color:#232230; color:white; width: 100%; padding:15px; border-radius:15px;">
-    <div class="row">
-        <div class="col-md-12 d-flex align-items-center">
-            <h1>AYUDA</h1>
-            <img src="../css/img/ayuda.png" alt="ayuda_pregunta" width="50px" height="50px">
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-2">
-            <ul style="list-style-type: none; color: white; padding: 20px;">
-                <li style="margin: 5px 0;"><a href="#" style="color: white; text-decoration: none;">Cuenta y Perfil</a></li>
-                <li style="margin: 5px 0;"><a href="archivos.html" style="color: white; text-decoration: none;">Nube</a></li>
-                <li style="margin: 5px 0;"><a href="termino.html" style="color: white; text-decoration: none;">Políticas del sitio</a></li>
-                <li style="margin: 5px 0;"><a href="https://code.visualstudio.com/download" style="color: white; text-decoration: none;">Aplicacion</a></li>
-                <li style="margin: 5px 0;"><a href="entrevista.html" style="color: white; text-decoration: none;">Entrevista</a></li>
-                <li style="margin: 5px 0;"><a href="index.php" style="color: white; text-decoration: none;">Curso</a></li>
-                <li style="margin: 5px 0;"><a href="#" style="color: white; text-decoration: none;">Soporte</a></li>
-            </ul>
-        </div>
-        <div class="col-md-9">
-            <div class="row" style="border: 1px solid white; ">
-                <div class="col-md-4" style="margin-top: 15%;">
-                    <p style="font-size: 20px; font-family: calibri;">
-                        AQUÍ ENCONTRARAS LAS SOLUCIONES A TUS PROBLEMAS
-                    </p>
-                </div>
-                <div class="col-md-8 d-flex justify-content-center align-items-center">
-                    <img src="../css/img/ayuda2.png" alt="" class="img-fluid">
-                </div>
-            </div>
-            <div class="row" style="border: 1px solid white;">
-                <div class="col text-center">
-                    <h1>SOLUCION</h1>
-                </div>
+
+    <div class="container mt-5">
+        <h2 class="text-center">Estadísticas de Inscripciones en Cursos</h2>
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <canvas id="myChart" width="50" height="25" style="background-color:white; padding: 10px;"></canvas>
             </div>
         </div>
     </div>
-</div>
+    <script>
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var labels = <?php echo $labels_json; ?>;
+        var datasets = <?php echo $datasets_json; ?>;
+
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: datasets
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>

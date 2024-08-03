@@ -6,7 +6,7 @@
 </head>
 
 <body>
-    <?php include '../controller/mensajes.php'; ?> <!-- Incluir el archivo de mensajes -->
+    <?php include 'mensajes.php'; ?> <!-- Incluir el archivo de mensajes -->
 
     <?php
     // Incluir el archivo de configuración de la base de datos

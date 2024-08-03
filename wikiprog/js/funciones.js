@@ -98,8 +98,8 @@ function obtenerInteracciones(cursoId, cursoDiv) {
     fetch(`../model/get_interacion.php?curso_id=${cursoId}`)
         .then(response => response.json())
         .then(data => {
-            cursoDiv.querySelector('.like-count').textContent = `Likes: ${data.like}`;
-            cursoDiv.querySelector('.dislike-count').textContent = `Dislikes: ${data.dislike}`;
+            cursoDiv.querySelector('.like-count').textContent = `aprovado: ${data.like}`;
+            cursoDiv.querySelector('.dislike-count').textContent = `desaprovado: ${data.dislike}`;
         })
         .catch(error => console.error('Error fetching interactions:', error));
 }

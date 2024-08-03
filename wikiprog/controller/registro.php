@@ -40,25 +40,36 @@ if (!$terminos) {
     exit;
 }
 
-// Proteger contra inyecciones SQL y preparar la inserción de datos
+// Proteger contra inyecciones SQL y preparar la consulta para verificar existencia
 $stmt = $conn->prepare("SELECT * FROM usuario WHERE usuario = ? OR correo = ?");
+if ($stmt === false) {
+    die('Error en la preparación de la consulta: ' . $conn->error);
+}
+
 $stmt->bind_param("ss", $user, $email);
 $stmt->execute();
 $result = $stmt->get_result();
 
 if ($result->num_rows > 0) {
     echo "El nombre de usuario o el correo ya están en uso";
+    $stmt->close();
+    $conn->close();
     exit;
 } else {
-    // Insertar el nuevo usuario en la base de datos sin encriptar la contraseña
-    $stmt = $conn->prepare("INSERT INTO usuario (usuario, correo, biografia, contraseña, rango_id) VALUES (?, ?, ?, ?, ?)");
+    // Insertar el nuevo usuario en la base de datos
+    $stmt = $conn->prepare("INSERT INTO usuario (usuario, img_usuario, correo, biografia, contraseña, rango_id) VALUES (?, ?, ?, ?, ?, ?)");
+    if ($stmt === false) {
+        die('Error en la preparación de la consulta: ' . $conn->error);
+    }
+
+    $img_usuario = '../img_usuario/perfil.png';
     $rango_id = 1; // Asignar el rango de usuario básico
-    $stmt->bind_param("ssssi", $user, $email, $bio, $pass, $rango_id);
+    $stmt->bind_param("sssssi", $user, $img_usuario, $email, $bio, $pass, $rango_id);
 
     if ($stmt->execute()) {
         // Registro exitoso, redirigir a la página de inicio de sesión
-        // echo "Registro exitoso. Puedes iniciar sesión ahora.";
         header("Location: ../index.php");
+        exit;
     } else {
         // Error al insertar en la base de datos
         echo "Error: " . $stmt->error;

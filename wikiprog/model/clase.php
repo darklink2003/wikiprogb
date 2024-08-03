@@ -36,7 +36,6 @@ class Login
 
             $stmt->close();
         } else {
-            echo "Error al preparar la consulta: " . $conn->error;
         }
 
         $conn->close();
@@ -106,7 +105,6 @@ class Login
             $salida .= '</div>';
             $salida .= '</div>';
         } else {
-            echo "Error al ejecutar la consulta: " . $conn->error;
         }
 
         $conn->close();
@@ -124,20 +122,17 @@ class Login
         include 'db_config.php';
         include_once '../controller/class_fechas.php';
 
-  
-
         if (!isset($_SESSION['usuario_id'])) {
             die("Usuario no autenticado.");
         }
 
         $usuario_id = $_SESSION['usuario_id'];
-
         $salida = "";
 
         $sql = "SELECT curso_id, titulo_curso, descripcion, categoria_id, usuario_id, bloqueo, fecha_registro FROM curso";
 
         if ($consulta = $conn->query($sql)) {
-            $salida = '<div class="container-fluid" style="max-width:400vh;">';
+            $salida .= '<div class="container-fluid">';
             $salida .= '<div class="table-responsive">';
             $salida .= '<table class="table table-striped table-hover table-bordered">';
             $salida .= '<thead class="table-dark">';
@@ -171,6 +166,25 @@ class Login
 
                 $fecha_registro = !empty($fila['fecha_registro']) ? Fecha::mostrarFechas($fila['fecha_registro']) : 'Fecha no disponible';
 
+                // Verificar interacciones del usuario con el curso
+                $interaccion_sql = "SELECT tipo_interaccion FROM interaccioncurso WHERE curso_id = ? AND usuario_id = ?";
+                $stmt = $conn->prepare($interaccion_sql);
+                $stmt->bind_param("ii", $curso_id, $usuario_id);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                $tipo_interaccion = '';
+                if ($result->num_rows > 0) {
+                    $row = $result->fetch_assoc();
+                    $tipo_interaccion = $row['tipo_interaccion'];
+                }
+                $stmt->close();
+
+                // Determinar el texto y la acción del botón basado en la interacción
+                $like_button_text = $tipo_interaccion === 'like' ? 'Quitar like' : 'Dar like';
+                $dislike_button_text = $tipo_interaccion === 'dislike' ? 'Quitar dislike' : 'Dar dislike';
+                $like_action = $tipo_interaccion === 'like' ? 'quitar_like' : 'like';
+                $dislike_action = $tipo_interaccion === 'dislike' ? 'quitar_dislike' : 'dislike';
+
                 $salida .= '<tr>';
                 $salida .= '<td>' . htmlspecialchars($fila['titulo_curso'], ENT_QUOTES, 'UTF-8') . '</td>';
                 $salida .= '<td>' . htmlspecialchars($fila['descripcion'], ENT_QUOTES, 'UTF-8') . '</td>';
@@ -180,8 +194,9 @@ class Login
                 $salida .= '<td>' . htmlspecialchars($fecha_registro, ENT_QUOTES, 'UTF-8') . '</td>';
                 $salida .= '<td>';
                 $salida .= '<a href="../controller/controlador.php?seccion=seccion14&id=' . $curso_id . '" class="btn btn-primary btn-sm">Editar</a> ';
-                $salida .= '<a href="../model/acciones.php?accion=like&id=' . $curso_id . '" class="btn btn-success btn-sm">Me gusta</a> ';
-                $salida .= '<a href="../model/acciones.php?accion=dislike&id=' . $curso_id . '" class="btn btn-danger btn-sm">No Me gusta</a> ';
+
+                $salida .= '<a href="../model/acciones.php?accion=' . $like_action . '&id=' . $curso_id . '" class="btn btn-success btn-sm">' . $like_button_text . '</a> ';
+                $salida .= '<a href="../model/acciones.php?accion=' . $dislike_action . '&id=' . $curso_id . '" class="btn btn-danger btn-sm">' . $dislike_button_text . '</a> ';
                 $salida .= '</td>';
                 $salida .= '</tr>';
             }
@@ -191,13 +206,15 @@ class Login
             $salida .= '</div>';
             $salida .= '</div>';
         } else {
-            echo "Error al ejecutar la consulta: " . $conn->error;
+            $salida = '<p>No se pudo realizar la consulta: ' . htmlspecialchars($conn->error, ENT_QUOTES, 'UTF-8') . '</p>';
         }
+
 
         $conn->close();
 
         return $salida;
     }
+
     /**
      * Función para obtener y mostrar una tabla HTML con las inscripciones a cursos.
      * 
@@ -551,5 +568,6 @@ class Login
             return "Error al preparar la consulta.";
         }
     }
+
 }
 ?>

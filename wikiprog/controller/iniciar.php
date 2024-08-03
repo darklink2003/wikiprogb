@@ -9,7 +9,7 @@
 
     // Configuración de la base de datos
     include '../model/db_config.php'; // Incluir el archivo de configuración de la base de datos
-    include 'mensajes.php'; // Incluir el archivo de mensajes
+    include '../model/mensajes.php'; // Incluir el archivo de mensajes
 
     // Obtener los datos del formulario
     $username = $_POST['username'] ?? '';

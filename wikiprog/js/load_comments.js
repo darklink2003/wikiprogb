@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     comentarioContainer.className = 'comentario-container border rounded';
 
                     const usuario = document.createElement('h5');
-                    usuario.textContent = `${comentario.nombre_usuario}`;
+                    usuario.textContent = comentario.nombre_usuario;
 
                     const fecha = document.createElement('p');
                     fecha.textContent = `Fecha: ${comentario.fecha_registro} (${comentario.tiempo_transcurrido})`;
@@ -31,13 +31,23 @@ document.addEventListener('DOMContentLoaded', () => {
                     const contenido = document.createElement('p');
                     contenido.textContent = comentario.comentario;
 
-
+                    // Crear botón de eliminar
+                    const eliminarBtn = document.createElement('button');
+                    eliminarBtn.textContent = 'Eliminar';
+                    eliminarBtn.className = 'btn btn-danger';
+                    eliminarBtn.addEventListener('click', async () => {
+                        const confirmed = confirm('¿Estás seguro de que deseas eliminar este comentario?');
+                        if (confirmed) {
+                            await eliminarComentario(comentario.comentario_id); // Asegúrate de usar el ID correcto
+                            cargarComentarios(cursoId); // Recargar comentarios después de eliminar
+                        }
+                    });
 
                     // Agregar elementos al contenedor del comentario
                     comentarioContainer.appendChild(usuario);
                     comentarioContainer.appendChild(fecha);
                     comentarioContainer.appendChild(contenido);
-
+                    comentarioContainer.appendChild(eliminarBtn);
 
                     // Agregar contenedor de comentario al contenedor principal
                     comentarioDiv.appendChild(comentarioContainer);
@@ -53,5 +63,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Eliminar la función manejarInteraccion ya que no se necesita
+    async function eliminarComentario(comentarioId) {
+        try {
+            const response = await axios.post(`../model/delete_comment.php`, { id: comentarioId });
+            if (response.data.success) {
+                console.log(`Comentario con ID ${comentarioId} eliminado exitosamente.`);
+            } else {
+                console.error(`Error al eliminar el comentario con ID ${comentarioId}:`, response.data.message);
+            }
+        } catch (error) {
+            console.error('Error al eliminar el comentario:', error);
+        }
+    }
 });
