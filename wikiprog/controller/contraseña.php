@@ -1,3 +1,9 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body></body>
 <?php
 // Incluir PHPMailer y sus dependencias
 use PHPMailer\PHPMailer\PHPMailer;
@@ -6,6 +12,7 @@ use PHPMailer\PHPMailer\Exception;
 require 'PHPMailer/PHPMailer.php';
 require 'PHPMailer/Exception.php';
 require 'PHPMailer/SMTP.php'; // Solo si estás usando SMTP
+require '../model/mensajes.php'; // Asegúrate de incluir el archivo con las funciones de alerta
 
 // Obtener los datos del GET y sanitizarlos
 $nombre = htmlspecialchars($_GET['nombre']);
@@ -35,14 +42,16 @@ try {
 
     // Contenido del correo
     $mail->isHTML(true);
-    $mail->Subject = "Recuperación de contraseña para el usuario $nombre";
-    $mail->Body = "Su contraseña es: $contraseña";
+    $mail->Subject = "Recuperacion de contrasena para el usuario $nombre";
+    $mail->Body = "Su contrasena es: $contraseña";
     // $mail->AltBody = 'Texto alternativo para clientes que no soportan HTML';
 
     $mail->send();
-    header("location: controlador.php?seccion=seccion1");
+    alertaCorreoEnviado($nombre);
     exit(); // Asegura que el script se detenga aquí después de redirigir
 } catch (Exception $e) {
     echo "Error al enviar el correo: " . $mail->ErrorInfo;
 }
 ?>
+</body>
+</html>

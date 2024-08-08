@@ -60,35 +60,37 @@ if (empty($usuario_id) && !in_array($seccion, $public_sections)) {
 
     <!-- Barra de navegación -->
     <?php if ($seccion !== 'seccion2'): ?>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="controlador.php?seccion=seccion1">WikiProg</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="controlador.php?seccion=seccion1">WikiProg</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="controlador.php?seccion=seccion9">Tu Perfil</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="controlador.php?seccion=seccion12&usuario_id=<?php echo htmlspecialchars($usuario_id); ?>">Tu Nube</a>
-                    </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="controlador.php?seccion=seccion9">Tu Perfil</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link"
+                                href="controlador.php?seccion=seccion12&usuario_id=<?php echo htmlspecialchars($usuario_id); ?>">Tu
+                                Nube</a>
+                        </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="controlador.php?seccion=seccion10">Configuración</a>
-                    </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="controlador.php?seccion=seccion10">Configuración</a>
+                        </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="logout.php">Cerrar Sesión</a>
-                    </li>
-                </ul>
+                        <li class="nav-item">
+                            <a class="nav-link" href="logout.php">Cerrar Sesión</a>
+                        </li>
+                    </ul>
+                </div>
             </div>
-        </div>
-    </nav>
-<?php endif; ?>
+        </nav>
+    <?php endif; ?>
 
     <!-- Contenido de la sección -->
     <div class="container" style="margin-top:50px;">
@@ -112,16 +114,16 @@ if (empty($usuario_id) && !in_array($seccion, $public_sections)) {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script>
 
 
-    <script src="../js/load_prueba.js"></script>
-    <script src="../js/load_usuario.js"></script>
-    <script src="../js/load_certificado.js"></script>
-    <script src="../js/load_inscripcion.js"></script>
-    <script src="../js/load_archivos.js"></script>
-    <script src="../js/load_comments.js"></script>
-    <script src="../js/mensajes.js"></script>
-    <script src="../js/scripts.js"></script>
-    <script src="../js/perfil.js"></script>
-    <script src="../js/funciones.js"></script>
+    <script src="../js/load_prueba.min.js"></script>
+    <script src="../js/load_usuario.min.js"></script>
+    <script src="../js/load_certificado.min.js"></script>
+    <script src="../js/load_inscripcion.min.js"></script>
+    <script src="../js/load_archivos.min.js"></script>
+    <script src="../js/load_comments.min.js"></script>
+    <script src="../js/mensajes.min.js"></script>
+    <script src="../js/scripts.min.js"></script>
+    <script src="../js/perfil.min.js"></script>
+    <script src="../js/funciones.min.js"></script>
 
 </body>
 

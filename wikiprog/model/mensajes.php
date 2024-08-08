@@ -56,7 +56,7 @@ function alertaContrasenaIncorrecta()
  */
 function alertaUsuarioNoEncontrado($usuario)
 {
-    mostrarAlerta('error', 'Usuario no encontrado', 'El usuario ingresado no existe: $usuario', 'controlador.php?seccion=seccion3');
+    mostrarAlerta('error', 'Usuario no encontrado', "El usuario ingresado no existe: $usuario", 'controlador.php?seccion=seccion3');
 }
 
 /**
@@ -146,5 +146,25 @@ function alertaError($errores, $redirectUrl)
 function alertaErrorSesion()
 {
     mostrarAlerta('error', 'Sesión no iniciada', 'Debe iniciar sesión para continuar.', '../controller/controlador.php?seccion=seccion2&error=not_logged_in');
+}
+/**
+ * Muestra una alerta indicando que el usuario no fue encontrado.
+ *
+ * @param string $usuario El nombre de usuario que no fue encontrado.
+ */
+function alertaUsuarioNoEncontrado2($usuario)
+{
+    $mensaje = "El usuario ingresado no existe: " . htmlspecialchars($usuario, ENT_QUOTES, 'UTF-8');
+    mostrarAlerta('error', 'Usuario no encontrado', $mensaje, 'controlador.php?seccion=seccion20');
+}
+/**
+ * Muestra una alerta indicando que el correo fue enviado.
+ *
+ * @param string $nombre El nombre de usuario al que se envió el correo.
+ */
+function alertaCorreoEnviado($nombre)
+{
+    $mensaje = "Correo de recuperación enviado correctamente al usuario: " . htmlspecialchars($nombre, ENT_QUOTES, 'UTF-8');
+    mostrarAlerta('success', 'Correo enviado', $mensaje, 'controlador.php?seccion=seccion1');
 }
 ?>

@@ -35,7 +35,7 @@ CREATE TABLE `archivo` (
   KEY `privacidad_id` (`privacidad_id`),
   CONSTRAINT `archivo_ibfk_1` FOREIGN KEY (`usuario_id`) REFERENCES `usuario` (`usuario_id`),
   CONSTRAINT `archivo_ibfk_2` FOREIGN KEY (`privacidad_id`) REFERENCES `privacidad` (`privacidad_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -44,30 +44,8 @@ CREATE TABLE `archivo` (
 
 LOCK TABLES `archivo` WRITE;
 /*!40000 ALTER TABLE `archivo` DISABLE KEYS */;
-INSERT INTO `archivo` VALUES (49,40,'ADSO-14 - EV03 funciones python.py','2.63 KB',1,'2024-08-01 15:03:45','0');
 /*!40000 ALTER TABLE `archivo` ENABLE KEYS */;
 UNLOCK TABLES;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8mb4 */ ;
-/*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'NO_ZERO_IN_DATE,NO_ZERO_DATE,NO_ENGINE_SUBSTITUTION' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER after_archivo_insert
-AFTER INSERT ON archivo
-FOR EACH ROW
-BEGIN
-  INSERT INTO registro_creacion_archivo (archivo_id, fecha_creacion)
-  VALUES (NEW.archivo_id, NEW.fecha_registro);
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
 
 --
 -- Table structure for table `categoria`
@@ -110,7 +88,7 @@ CREATE TABLE `comentario` (
   PRIMARY KEY (`comentario_id`),
   KEY `usuario_id` (`usuario_id`),
   CONSTRAINT `comentario_ibfk_1` FOREIGN KEY (`usuario_id`) REFERENCES `usuario` (`usuario_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -119,7 +97,6 @@ CREATE TABLE `comentario` (
 
 LOCK TABLES `comentario` WRITE;
 /*!40000 ALTER TABLE `comentario` DISABLE KEYS */;
-INSERT INTO `comentario` VALUES (40,40,73,'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod sapiente exercitationem sunt unde minus consectetur reprehenderit atque quibusdam delectus. Similique sint suscipit eligendi debitis magni ipsa eum quae dolore exercitationem.','2024-08-01 15:10:01');
 /*!40000 ALTER TABLE `comentario` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -143,7 +120,7 @@ CREATE TABLE `curso` (
   KEY `curso_ibfk_usuario` (`usuario_id`),
   CONSTRAINT `curso_ibfk_1` FOREIGN KEY (`categoria_id`) REFERENCES `categoria` (`categoria_id`),
   CONSTRAINT `curso_ibfk_usuario` FOREIGN KEY (`usuario_id`) REFERENCES `usuario` (`usuario_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=74 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=75 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -152,30 +129,9 @@ CREATE TABLE `curso` (
 
 LOCK TABLES `curso` WRITE;
 /*!40000 ALTER TABLE `curso` DISABLE KEYS */;
-INSERT INTO `curso` VALUES (73,'Explicacion ','Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod sapiente exercitationem sunt unde minus consectetur reprehenderit atque quibusdam delectus. Similique sint suscipit eligendi debitis magni ipsa eum quae dolore exercitationem.',5,40,0,'2024-08-01 15:07:41');
+INSERT INTO `curso` VALUES (73,'Explicacion','Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod sapiente exercitationem sunt unde minus consectetur reprehenderit atque quibusdam delectus. Similique sint suscipit eligendi debitis magni ipsa eum quae dolore exercitationem.',5,40,0,'2024-08-01 15:07:41'),(74,'Curso','lorem',2,40,0,'2024-08-02 16:20:19');
 /*!40000 ALTER TABLE `curso` ENABLE KEYS */;
 UNLOCK TABLES;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8mb4 */ ;
-/*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'NO_ZERO_IN_DATE,NO_ZERO_DATE,NO_ENGINE_SUBSTITUTION' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER after_curso_insert
-AFTER INSERT ON curso
-FOR EACH ROW
-BEGIN
-  INSERT INTO registro_creacion_curso (curso_id, fecha_creacion)
-  VALUES (NEW.curso_id, NEW.fecha_registro);
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
 
 --
 -- Table structure for table `inscripción`
@@ -200,7 +156,7 @@ CREATE TABLE `inscripción` (
   KEY `usuario_id` (`usuario_id`),
   CONSTRAINT `inscripción_ibfk_1` FOREIGN KEY (`curso_id`) REFERENCES `curso` (`curso_id`) ON DELETE SET NULL,
   CONSTRAINT `inscripción_ibfk_2` FOREIGN KEY (`usuario_id`) REFERENCES `usuario` (`usuario_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -209,7 +165,6 @@ CREATE TABLE `inscripción` (
 
 LOCK TABLES `inscripción` WRITE;
 /*!40000 ALTER TABLE `inscripción` DISABLE KEYS */;
-INSERT INTO `inscripción` VALUES (10,73,40,'pablo','pablomondragonacevedo@gmail.com','masculino','colombia','no',100,'2024-08-01 10:11:52');
 /*!40000 ALTER TABLE `inscripción` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -231,7 +186,7 @@ CREATE TABLE `interaccioncurso` (
   KEY `usuario_id` (`usuario_id`),
   CONSTRAINT `interaccioncurso_ibfk_1` FOREIGN KEY (`curso_id`) REFERENCES `curso` (`curso_id`) ON DELETE CASCADE,
   CONSTRAINT `interaccioncurso_ibfk_2` FOREIGN KEY (`usuario_id`) REFERENCES `usuario` (`usuario_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=154 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=156 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -240,7 +195,6 @@ CREATE TABLE `interaccioncurso` (
 
 LOCK TABLES `interaccioncurso` WRITE;
 /*!40000 ALTER TABLE `interaccioncurso` DISABLE KEYS */;
-INSERT INTO `interaccioncurso` VALUES (153,73,40,'like','2024-08-01 16:05:25');
 /*!40000 ALTER TABLE `interaccioncurso` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -261,7 +215,7 @@ CREATE TABLE `leccion` (
   PRIMARY KEY (`leccion_id`),
   KEY `curso_id` (`curso_id`),
   CONSTRAINT `leccion_ibfk_1` FOREIGN KEY (`curso_id`) REFERENCES `curso` (`curso_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=74 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=75 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -270,7 +224,7 @@ CREATE TABLE `leccion` (
 
 LOCK TABLES `leccion` WRITE;
 /*!40000 ALTER TABLE `leccion` DISABLE KEYS */;
-INSERT INTO `leccion` VALUES (73,73,'leccion','Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod sapiente exercitationem sunt unde minus consectetur reprehenderit atque quibusdam delectus. Similique sint suscipit eligendi debitis magni ipsa eum quae dolore exercitationem.','../archivos_leccion/66aba4bd342a9_+ Mapa mental.pdf','2024-08-01 15:07:41');
+INSERT INTO `leccion` VALUES (73,73,'leccion','Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod sapiente exercitationem sunt unde minus consectetur reprehenderit atque quibusdam delectus. Similique sint suscipit eligendi debitis magni ipsa eum quae dolore exercitationem.','../archivos_leccion/66aba4bd342a9_+ Mapa mental.pdf','2024-08-01 15:07:41'),(74,74,'a','a','../archivos_leccion/66ad074376029_ADSO-21 - EV04_LCH_Transferencia.pdf','2024-08-02 16:20:19');
 /*!40000 ALTER TABLE `leccion` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -319,7 +273,7 @@ CREATE TABLE `prueba` (
   KEY `fk_prueba_curso` (`curso_id`),
   CONSTRAINT `fk_prueba_curso` FOREIGN KEY (`curso_id`) REFERENCES `curso` (`curso_id`),
   CONSTRAINT `fk_prueba_usuario` FOREIGN KEY (`usuario_id`) REFERENCES `usuario` (`usuario_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -328,7 +282,6 @@ CREATE TABLE `prueba` (
 
 LOCK TABLES `prueba` WRITE;
 /*!40000 ALTER TABLE `prueba` DISABLE KEYS */;
-INSERT INTO `prueba` VALUES (18,71,'que es ','das','../archivos_prueba/66a7820d6e655_ejercicio adso2.jpg',NULL,'2024-07-29 11:50:37'),(19,72,'te la crees ','comes','../archivos_prueba/66a905cc82562_certificado (4).pdf',NULL,'2024-07-30 15:25:00'),(20,73,'prueba','Lorem ipsum dolor sit amet consectetur adipis','../archivos_prueba/66aba4bd34624_ADSO-14 - EV03 ajedrez validaciones v3.py',NULL,'2024-08-01 15:07:41');
 /*!40000 ALTER TABLE `prueba` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -369,7 +322,7 @@ CREATE TABLE `registro_creacion_archivo` (
   `archivo_id` int(11) NOT NULL,
   `fecha_creacion` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -378,7 +331,7 @@ CREATE TABLE `registro_creacion_archivo` (
 
 LOCK TABLES `registro_creacion_archivo` WRITE;
 /*!40000 ALTER TABLE `registro_creacion_archivo` DISABLE KEYS */;
-INSERT INTO `registro_creacion_archivo` VALUES (1,43,'2024-07-31 15:59:14'),(2,46,'2024-08-01 12:59:13'),(3,47,'2024-08-01 12:59:26'),(4,48,'2024-08-01 12:59:46'),(5,49,'2024-08-01 15:03:45'),(6,50,'2024-08-01 16:31:00');
+INSERT INTO `registro_creacion_archivo` VALUES (1,43,'2024-07-31 15:59:14'),(2,46,'2024-08-01 12:59:13'),(3,47,'2024-08-01 12:59:26'),(4,48,'2024-08-01 12:59:46'),(5,49,'2024-08-01 15:03:45'),(6,50,'2024-08-01 16:31:00'),(7,51,'2024-08-02 13:00:31');
 /*!40000 ALTER TABLE `registro_creacion_archivo` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -394,7 +347,7 @@ CREATE TABLE `registro_creacion_curso` (
   `curso_id` int(11) NOT NULL,
   `fecha_creacion` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -403,7 +356,7 @@ CREATE TABLE `registro_creacion_curso` (
 
 LOCK TABLES `registro_creacion_curso` WRITE;
 /*!40000 ALTER TABLE `registro_creacion_curso` DISABLE KEYS */;
-INSERT INTO `registro_creacion_curso` VALUES (1,73,'2024-08-01 15:07:41');
+INSERT INTO `registro_creacion_curso` VALUES (1,73,'2024-08-01 15:07:41'),(2,74,'2024-08-02 16:20:19');
 /*!40000 ALTER TABLE `registro_creacion_curso` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -419,7 +372,7 @@ CREATE TABLE `registro_creacion_usuario` (
   `usuario_id` int(11) NOT NULL,
   `fecha_creacion` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -428,7 +381,7 @@ CREATE TABLE `registro_creacion_usuario` (
 
 LOCK TABLES `registro_creacion_usuario` WRITE;
 /*!40000 ALTER TABLE `registro_creacion_usuario` DISABLE KEYS */;
-INSERT INTO `registro_creacion_usuario` VALUES (1,39,'2024-07-31 15:58:21'),(2,40,'2024-08-01 13:12:42'),(3,41,'2024-08-01 13:16:40'),(4,42,'2024-08-01 14:06:35');
+INSERT INTO `registro_creacion_usuario` VALUES (1,39,'2024-07-31 15:58:21'),(2,40,'2024-08-01 13:12:42'),(3,41,'2024-08-01 13:16:40'),(4,42,'2024-08-01 14:06:35'),(5,43,'2024-08-02 16:17:33');
 /*!40000 ALTER TABLE `registro_creacion_usuario` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -459,7 +412,6 @@ CREATE TABLE `respuesta` (
 
 LOCK TABLES `respuesta` WRITE;
 /*!40000 ALTER TABLE `respuesta` DISABLE KEYS */;
-INSERT INTO `respuesta` VALUES (27,20,'ADSO-21 - EV04_LCH_Transferencia.pdf',10,'2024-08-01 10:22:10');
 /*!40000 ALTER TABLE `respuesta` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -484,7 +436,7 @@ CREATE TABLE `usuario` (
   PRIMARY KEY (`usuario_id`),
   KEY `rango_id` (`rango_id`),
   CONSTRAINT `usuario_ibfk_1` FOREIGN KEY (`rango_id`) REFERENCES `rango` (`rango_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -493,78 +445,9 @@ CREATE TABLE `usuario` (
 
 LOCK TABLES `usuario` WRITE;
 /*!40000 ALTER TABLE `usuario` DISABLE KEYS */;
-INSERT INTO `usuario` VALUES (40,'pablo','../img_usuario/perfil.png','pablomondragonacevedo@gmail.com','administrador','2',2,'2024-08-01 13:12:42',0,0),(41,'mike','null','zelda@gmil.com','rudios','3',3,'2024-08-01 13:16:40',1,0);
+INSERT INTO `usuario` VALUES (40,'admin','../img_usuario/perfil.png','admini@gmail.com','administrador','Administrador!',2,'2024-08-01 13:12:42',0,0),(41,'evaluador','../img_usuario/perfil.png','evaluador@gmil.com','evaluador','Evaluador$',3,'2024-08-01 13:16:40',0,0),(43,'usuario','../img_usuario/perfil.png','usuario@gmail.com','usuario','Usuario&',1,'2024-08-02 16:17:33',0,0);
 /*!40000 ALTER TABLE `usuario` ENABLE KEYS */;
 UNLOCK TABLES;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8mb4 */ ;
-/*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'NO_ZERO_IN_DATE,NO_ZERO_DATE,NO_ENGINE_SUBSTITUTION' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER after_usuario_insert
-AFTER INSERT ON usuario
-FOR EACH ROW
-BEGIN
-  INSERT INTO registro_creacion_usuario (usuario_id, fecha_creacion)
-  VALUES (NEW.usuario_id, NEW.fecha_registro);
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-
---
--- Dumping events for database 'wikiprog'
---
-
---
--- Dumping routines for database 'wikiprog'
---
-/*!50003 DROP FUNCTION IF EXISTS `dolar` */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8mb4 */ ;
-/*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'NO_ZERO_IN_DATE,NO_ZERO_DATE,NO_ENGINE_SUBSTITUTION' */ ;
-DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` FUNCTION `dolar`() RETURNS int(11)
-BEGIN
-return contar_usuarios()*4000;
-END ;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 DROP FUNCTION IF EXISTS `sumar` */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8mb4 */ ;
-/*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'NO_ZERO_IN_DATE,NO_ZERO_DATE,NO_ENGINE_SUBSTITUTION' */ ;
-DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` FUNCTION `sumar`(n1 float, n2  float) RETURNS float
-BEGIN
-
-    
-    RETURN n1 + n2 ; 
-END ;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -575,4 +458,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-08-02  6:44:52
+-- Dump completed on 2024-08-05 16:27:43

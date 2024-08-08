@@ -23,7 +23,7 @@
     $archivo_id = $_GET['archivo_id'];
 
     // Incluir el archivo de configuración de la base de datos
-    require_once 'db_config.php';
+    require_once '../model/db_config.php';  // Asegúrate de que la ruta es correcta
 
     // Consulta SQL para obtener la información del archivo antes de eliminarlo
     $sql_select = "SELECT nombre_archivo FROM archivo WHERE archivo_id = ?";
@@ -71,7 +71,17 @@
     }
 
     // Mostrar alerta de éxito y redirigir
-    alertaArchivoEliminado('../controller/controlador.php?seccion12&usuario_id=<?php echo htmlspecialchars($usuario_id)'); // Cambia "seccionX" según la sección correspondiente
+    echo "<script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Archivo eliminado',
+                text: 'El archivo ha sido eliminado exitosamente.',
+                showConfirmButton: false,
+                timer: 2000
+            }).then(() => {
+                window.location.href = '../controller/controlador.php?seccion12&usuario_id=" . htmlspecialchars($usuario_id) . "';
+            });
+          </script>";
 
     // Cerrar las declaraciones y la conexión
     $stmt_delete->close();
